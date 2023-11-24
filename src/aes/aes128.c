@@ -379,21 +379,21 @@ void AES128_Decrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[1
     }
     
     AES128_KeySchedule_2(key, roundKey);
-	AES_AddRoundkey(state, roundKey[0]);
+	AES_AddRoundkey(state, roundKey[10]);
 
 	//----------------------------------------------------------------------------
 	for (int j = 1; j < 10; j++)// 1~9라운드
 	{
         AES_InvShiftRows(state);
 		AES_InvSubBytes(state);
-        AES_AddRoundkey(state, roundKey[j]);
+        AES_AddRoundkey(state, roundKey[10 - j]);
         AES_InvMixColumns(state);
 	}
 
 	//10 라운드
 	AES_InvShiftRows(state);
     AES_InvSubBytes(state);
-    AES_AddRoundkey(state, roundKey[10]);
+    AES_AddRoundkey(state, roundKey[0]);
 	
     for (int j = 0; j < 16; j++) {
         plainText[j] = state[j];
