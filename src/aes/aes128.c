@@ -359,4 +359,7 @@ void AES128_Decrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
     AES_InvSubBytes(state);
     AES_AddRoundkey(state, roundKey[10]);
 	
+    for (int j = 0; j < 16; j++) {
+        plainText[j] = state[j];
+    }
 }
