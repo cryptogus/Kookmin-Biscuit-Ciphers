@@ -193,6 +193,8 @@ void AES_InvMixColumns(int8_t state[16]) {
     state[15] = tmp3;
 }
 
+
+// key 확장: on-the-fly
 void AES128_KeySchedule(int8_t round, int8_t key[])
 {
     key[0] = key[0] ^ round_Constant[round - 1] ^ Sbox[key[13]];
@@ -204,10 +206,100 @@ void AES128_KeySchedule(int8_t round, int8_t key[])
 		key[i + 4] = key[i] ^ key[i + 4];
 }
 
+//key 확장 ver2: Round Key를 미리 만들어둠
+void AES128_KeySchedule_2(int8_t key[], int8_t roundKey[][16])
+{
+    
+	for (int j = 0; j < 16; j++) //word 0~3
+		roundKey[0][j] = key[j];
+
+	roundKey[1][0] = roundKey[0][0] ^ round_Constant[0] ^ Sbox[roundKey[0][13]];//G func
+	roundKey[1][1] = roundKey[0][1] ^ Sbox[roundKey[0][14]];
+	roundKey[1][2] = roundKey[0][2] ^ Sbox[roundKey[0][15]];
+	roundKey[1][3] = roundKey[0][3] ^ Sbox[roundKey[0][12]];
+
+	for (int i = 0; i < 12; i++)//word4~7
+		roundKey[1][i + 4] = roundKey[1][i] ^ roundKey[0][i + 4];
+
+	roundKey[2][0] = roundKey[1][0] ^ round_Constant[1] ^ Sbox[roundKey[1][13]];
+	roundKey[2][1] = roundKey[1][1] ^ Sbox[roundKey[1][14]];
+	roundKey[2][2] = roundKey[1][2] ^ Sbox[roundKey[1][15]];
+	roundKey[2][3] = roundKey[1][3] ^ Sbox[roundKey[1][12]];
+
+	for (int i = 0; i < 12; i++)//word8~11
+		roundKey[2][i + 4] = roundKey[2][i] ^ roundKey[1][i + 4];
+
+	roundKey[3][0] = roundKey[2][0] ^ round_Constant[2] ^ Sbox[roundKey[2][13]];
+	roundKey[3][1] = roundKey[2][1] ^ Sbox[roundKey[2][14]];
+	roundKey[3][2] = roundKey[2][2] ^ Sbox[roundKey[2][15]];
+	roundKey[3][3] = roundKey[2][3] ^ Sbox[roundKey[2][12]];
+
+	for (int i = 0; i < 12; i++)//word 12~15
+		roundKey[3][i + 4] = roundKey[3][i] ^ roundKey[2][i + 4];
+
+	roundKey[4][0] = roundKey[3][0] ^ round_Constant[3] ^ Sbox[roundKey[3][13]];
+	roundKey[4][1] = roundKey[3][1] ^ Sbox[roundKey[3][14]];
+	roundKey[4][2] = roundKey[3][2] ^ Sbox[roundKey[3][15]];
+	roundKey[4][3] = roundKey[3][3] ^ Sbox[roundKey[3][12]];
+
+	for (int i = 0; i < 12; i++)//word 16~19
+		roundKey[4][i + 4] = roundKey[4][i] ^ roundKey[3][i + 4];
+
+	roundKey[5][0] = roundKey[4][0] ^ round_Constant[4] ^ Sbox[roundKey[4][13]];
+	roundKey[5][1] = roundKey[4][1] ^ Sbox[roundKey[4][14]];
+	roundKey[5][2] = roundKey[4][2] ^ Sbox[roundKey[4][15]];
+	roundKey[5][3] = roundKey[4][3] ^ Sbox[roundKey[4][12]];
+
+	for (int i = 0; i < 12; i++)//word 20~23
+		roundKey[5][i + 4] = roundKey[5][i] ^ roundKey[4][i + 4];
+
+	roundKey[6][0] = roundKey[5][0] ^ round_Constant[5] ^ Sbox[roundKey[5][13]];
+	roundKey[6][1] = roundKey[5][1] ^ Sbox[roundKey[5][14]];
+	roundKey[6][2] = roundKey[5][2] ^ Sbox[roundKey[5][15]];
+	roundKey[6][3] = roundKey[5][3] ^ Sbox[roundKey[5][12]];
+
+	for (int i = 0; i < 12; i++)//word 24~27
+		roundKey[6][i + 4] = roundKey[6][i] ^ roundKey[5][i + 4];
+
+	roundKey[7][0] = roundKey[6][0] ^ round_Constant[6] ^ Sbox[roundKey[6][13]];
+	roundKey[7][1] = roundKey[6][1] ^ Sbox[roundKey[6][14]];
+	roundKey[7][2] = roundKey[6][2] ^ Sbox[roundKey[6][15]];
+	roundKey[7][3] = roundKey[6][3] ^ Sbox[roundKey[6][12]];
+
+	for (int i = 0; i < 12; i++)//word 28~31
+		roundKey[7][i + 4] = roundKey[7][i] ^ roundKey[6][i + 4];
+
+	roundKey[8][0] = roundKey[7][0] ^ round_Constant[7] ^ Sbox[roundKey[7][13]];
+	roundKey[8][1] = roundKey[7][1] ^ Sbox[roundKey[7][14]];
+	roundKey[8][2] = roundKey[7][2] ^ Sbox[roundKey[7][15]];
+	roundKey[8][3] = roundKey[7][3] ^ Sbox[roundKey[7][12]];
+
+	for (int i = 0; i < 12; i++)//word 32~35
+		roundKey[8][i + 4] = roundKey[8][i] ^ roundKey[7][i + 4];
+
+	roundKey[9][0] = roundKey[8][0] ^ round_Constant[8] ^ Sbox[roundKey[8][13]];
+	roundKey[9][1] = roundKey[8][1] ^ Sbox[roundKey[8][14]];
+	roundKey[9][2] = roundKey[8][2] ^ Sbox[roundKey[8][15]];
+	roundKey[9][3] = roundKey[8][3] ^ Sbox[roundKey[8][12]];
+
+	for (int i = 0; i < 12; i++)//word 36~39
+		roundKey[9][i + 4] = roundKey[9][i] ^ roundKey[8][i + 4];
+
+	roundKey[10][0] = roundKey[9][0] ^ round_Constant[9] ^ Sbox[roundKey[9][13]];
+	roundKey[10][1] = roundKey[9][1] ^ Sbox[roundKey[9][14]];
+	roundKey[10][2] = roundKey[9][2] ^ Sbox[roundKey[9][15]];
+	roundKey[10][3] = roundKey[9][3] ^ Sbox[roundKey[9][12]];
+
+	for (int i = 0; i < 12; i++)//word 40~43
+		roundKey[10][i + 4] = roundKey[10][i] ^ roundKey[9][i + 4];
+
+}
+
 void AES128_Encrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
 {
 	int8_t state[16] = { 0, };
-
+    
+    // memcpy 사용 X
 	for (int j = 0; j < 16; j++) {
         state[j] = plainText[j];
     }
@@ -234,5 +326,42 @@ void AES128_Encrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
 	AES_SubBytes(state);
 	AES_ShiftRows(state);
     AES_AddRoundkey(state, key);
+
+    for (int j = 0; j < 16; j++) {
+        cipherText[j] = state[j];
+    }
+	
+}
+
+void AES128_Decrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
+{
+	int8_t state[16] = { 0, };
+    int8_t roundKey[11][16] = { 0, };
+
+	for (int j = 0; j < 16; j++) {
+        state[j] = cipherText[j];
+    }
+    
+    AES128_KeySchedule_2(key, roundKey);
+	AES_AddRoundkey(state, roundKey[0]);
+
+	//----------------------------------------------------------------------------
+	for (int j = 1; j < 10; j++)// 1~9라운드
+	{
+
+		// Key expansion on-the-fly
+		AES128_KeySchedule(j, roundKey[j]);
+
+        AES_SubBytes(state);
+		AES_ShiftRows(state);
+		AES_MixColumns(state);
+        AES_AddRoundkey(state, roundKey[j]);
+		
+	}
+
+	//10 라운드
+	AES_SubBytes(state);
+	AES_ShiftRows(state);
+    AES_AddRoundkey(state, roundKey[10]);
 	
 }
