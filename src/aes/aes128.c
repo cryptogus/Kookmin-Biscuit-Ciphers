@@ -348,20 +348,15 @@ void AES128_Decrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
 	//----------------------------------------------------------------------------
 	for (int j = 1; j < 10; j++)// 1~9라운드
 	{
-
-		// Key expansion on-the-fly
-		AES128_KeySchedule(j, roundKey[j]);
-
-        AES_SubBytes(state);
-		AES_ShiftRows(state);
-		AES_MixColumns(state);
+        AES_InvShiftRows(state);
+		AES_InvSubBytes(state);
         AES_AddRoundkey(state, roundKey[j]);
-		
+        AES_InvMixColumns(state);
 	}
 
 	//10 라운드
-	AES_SubBytes(state);
-	AES_ShiftRows(state);
+	AES_InvShiftRows(state);
+    AES_InvSubBytes(state);
     AES_AddRoundkey(state, roundKey[10]);
 	
 }
