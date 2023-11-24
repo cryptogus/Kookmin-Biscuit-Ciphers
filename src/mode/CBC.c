@@ -15,7 +15,7 @@ void CBC_enc(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint
 		    src[tmp + j] ^= IV[j];
 	    }
         
-        cipher(des + (tmp) ,src + (tmp), key2);
+        cipher(des + tmp ,src + tmp, key2);
         
         for (int j = 0; j < 16; j++)
 	    {
@@ -36,7 +36,7 @@ void CBC_dec(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint
         
         int tmp = (i << 4);
         
-        cipher(des + (tmp) ,src + (tmp), key2);
+        cipher(des + tmp , src + tmp, key2);
         
         for (int j = 0; j < 16; j++)
 	    {
