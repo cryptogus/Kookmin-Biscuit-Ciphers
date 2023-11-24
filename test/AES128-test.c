@@ -41,7 +41,7 @@ int main(void)
 		printf("%02x ", usr_cipherText[i]);
 	}
     printf("\n=================================================================\n");
-    AES128_Decrypt(cipherText, usr_plainText, dec_key);
+    AES128_Decrypt(usr_plainText, cipherText, dec_key);
 
     for (int i = 0; i < 16; i++)
     {
