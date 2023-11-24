@@ -14,10 +14,12 @@ int main(int argc, char *argv[])
         usage();
         return -1;
     }
+
+    // padding된 결과 배열의 길이
+    size_t len = 0;
+    unsigned char *pad_text = pkcs7_padding(argv[1], 16, &len);
     
-    unsigned char *pad_text = pkcs7_padding(argv[1], 16);
-    
-    for (int i = 0; i < 32; i++)
+    for (int i = 0; i < len; i++)
     {
         printf("%02x ", pad_text[i]);
     }
