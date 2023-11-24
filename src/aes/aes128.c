@@ -1,15 +1,15 @@
 #include "aes.h"
 
 // Galois filed 연산 in MixColumns
-inline int8_t GF_xtime(int8_t gf) {
+inline uint8_t GF_xtime(uint8_t gf) {
     return ((((gf >> 7) & 0x01) == 1) ? (gf << 1) ^ 0x1b : gf << 1);
 }
 
 // key확장시 g함수 구현 for AES128
-const int8_t round_Constant[10] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36 };
+const uint8_t round_Constant[10] = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36};
 
 
-void AES_AddRoundkey(int8_t state[16], int8_t roundkey[16]) {
+void AES_AddRoundkey(uint8_t state[16], uint8_t roundkey[16]) {
 
     for (int i = 0; i < 16; i++) {
         state[i] ^= roundkey[i];
@@ -17,7 +17,7 @@ void AES_AddRoundkey(int8_t state[16], int8_t roundkey[16]) {
 
 }
 
-void AES_SubBytes(int8_t state[16]) {
+void AES_SubBytes(uint8_t state[16]) {
 
     for (int i = 0; i < 16; i++) {
         state[i] = Sbox[state[i]];
@@ -25,7 +25,7 @@ void AES_SubBytes(int8_t state[16]) {
 
 }
 
-void AES_InvSubBytes(int8_t state[16]) {
+void AES_InvSubBytes(uint8_t state[16]) {
 
     for (int i = 0; i < 16; i++) {
         state[i] = ISbox[state[i]];
@@ -33,9 +33,9 @@ void AES_InvSubBytes(int8_t state[16]) {
 
 }
 
-void AES_ShiftRows(int8_t state[16]) {
+void AES_ShiftRows(uint8_t state[16]) {
 
-    int8_t temp;
+    uint8_t temp;
 
     temp = state[1];
     state[1] = state[5];
@@ -57,9 +57,9 @@ void AES_ShiftRows(int8_t state[16]) {
     state[7] = temp;
 }
 
-void AES_InvShiftRows(int8_t state[16]) {
+void AES_InvShiftRows(uint8_t state[16]) {
 
-    int8_t temp;
+    uint8_t temp;
 
     temp = state[13];
     state[13] = state[9];
@@ -82,9 +82,9 @@ void AES_InvShiftRows(int8_t state[16]) {
 
 }
 
-void AES_MixColumns(int8_t state[16]) {
+void AES_MixColumns(uint8_t state[16]) {
 
-    int8_t sum, tmp0, tmp1, tmp2, tmp3;
+    uint8_t sum, tmp0, tmp1, tmp2, tmp3;
 
     sum = state[0] ^ state[1] ^ state[2] ^ state[3];
     tmp0 = GF_xtime(state[0] ^ state[1]);
@@ -131,9 +131,9 @@ void AES_MixColumns(int8_t state[16]) {
     state[15] ^= tmp3 ^ sum;
 }
 
-void AES_InvMixColumns(int8_t state[16]) {
+void AES_InvMixColumns(uint8_t state[16]) {
 
-    int8_t sum8, tmp0, tmp1, tmp2, tmp3;
+    uint8_t sum8, tmp0, tmp1, tmp2, tmp3;
 
     sum8 = GF_xtime(GF_xtime(GF_xtime(state[0] ^ state[1] ^ state[2] ^ state[3])));
     tmp0 = sum8 ^ GF_xtime(GF_xtime(state[0]) ^ state[0]) ^ GF_xtime(state[1]) ^ state[1]
@@ -195,7 +195,7 @@ void AES_InvMixColumns(int8_t state[16]) {
 
 
 // key 확장: on-the-fly
-void AES128_KeySchedule(int8_t round, int8_t key[])
+void AES128_KeySchedule(uint8_t round, uint8_t key[])
 {
     key[0] = key[0] ^ round_Constant[round - 1] ^ Sbox[key[13]];
 	key[1] = key[1] ^ Sbox[key[14]];
@@ -207,7 +207,7 @@ void AES128_KeySchedule(int8_t round, int8_t key[])
 }
 
 //key 확장 ver2: Round Key를 미리 만들어둠
-void AES128_KeySchedule_2(int8_t key[], int8_t roundKey[][16])
+void AES128_KeySchedule_2(uint8_t key[], uint8_t roundKey[][16])
 {
     
 	for (int j = 0; j < 16; j++) //word 0~3
@@ -295,9 +295,9 @@ void AES128_KeySchedule_2(int8_t key[], int8_t roundKey[][16])
 
 }
 
-void AES128_Encrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
+void AES128_Encrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[16])
 {
-	int8_t state[16] = { 0, };
+	uint8_t state[16] = { 0, };
     
     // memcpy 사용 X
 	for (int j = 0; j < 16; j++) {
@@ -333,10 +333,10 @@ void AES128_Encrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
 	
 }
 
-void AES128_Decrypt(int8_t cipherText[16] ,int8_t plainText[16], int8_t key[16])
+void AES128_Decrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[16])
 {
-	int8_t state[16] = { 0, };
-    int8_t roundKey[11][16] = { 0, };
+	uint8_t state[16] = { 0, };
+    uint8_t roundKey[11][16] = { 0, };
 
 	for (int j = 0; j < 16; j++) {
         state[j] = cipherText[j];
