@@ -8,8 +8,8 @@ unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *le
     size_t padding_value = block_size - (strlen(input) % block_size);
     
     // block 크기에 입력값이 딱 맞는 경우
-    if (padding_value == block_size)
-            padding_value = 0;
+    if (padding_value == 16)
+        padding_value = 0;
     
     *len = strlen(input) + padding_value;
     
