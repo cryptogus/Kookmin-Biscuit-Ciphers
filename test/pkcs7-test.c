@@ -19,9 +19,20 @@ int main(int argc, char *argv[])
     size_t len = 0;
     unsigned char *pad_text = pkcs7_padding(argv[1], 16, &len);
     
-    for (int i = 0; i < len; i++)
+    printf("padding: ");
+    for (size_t i = 0; i < len; i++)
     {
         printf("%02x ", pad_text[i]);
     }
+    
+    // padding제거
+    unsigned char *depad_text = pkcs7_depadding(pad_text , &len);
+    printf("\ndepadding: ");
+    for (size_t i = 0; i < len; i++)
+    {
+        printf("%02x ", depad_text[i]);
+    }
+
     free(pad_text);
+    free(depad_text);
 }
