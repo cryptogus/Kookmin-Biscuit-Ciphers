@@ -1,8 +1,13 @@
 set(crypto_OBJS "")
 
 add_subdirectory(aes)
-add_subdirectory(mode)
-
 set(crypto_OBJS ${crypto_OBJS} ${AES128})
+add_subdirectory(mode)
+set(crypto_OBJS ${crypto_OBJS} ${MODE})
+add_subdirectory(padding)
+set(crypto_OBJS ${crypto_OBJS} ${PADDING})
 
-add_library(mycrypto SHARED ${crypto_OBJS})
+# ${PROJECT_SOURCE_DIR}
+add_library(KMS SHARED ${crypto_OBJS})
+# 컴파일 옵션 설정
+target_compile_options(KMS PRIVATE -fPIC)
