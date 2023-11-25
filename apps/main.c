@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "api.h"
 
 void usage()
@@ -11,6 +12,7 @@ void usage()
 void help()
 {
     usage();
+    printf("\n");
     printf("Options:\n");
     printf("-e encrypt\n");
     printf("-d decrypt\n\n");
@@ -36,10 +38,9 @@ int main(int argc, char *argv[]) {
     if (inputFile == NULL || outputFile == NULL) {
         perror("Error opening files");
         exit(EXIT_FAILURE);
-    }
-    */
-
-    if (argc < 3)
+    }*/
+    
+    if (argc < 2)
     {
         usage();
         return 2;
