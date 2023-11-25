@@ -19,9 +19,10 @@ Currently, it has been tested only on Linux
 - CBC
 
 ## Linux
-1. Install dependencies:
 
-    On Ubuntu:
+On Ubuntu:
+
+1. Install dependencies:
     
     ```bash
     $ sudo apt update
@@ -29,10 +30,14 @@ Currently, it has been tested only on Linux
     $ sudo apt install cmake gcc valgrind
     ```
 
-    build:
+2. Build
     ```bash
     $ cmake -B build -S . && cd build
     $ make -j$(nproc)
+    ```
+
+3. Test
+    ```bash
     ```
 
 
