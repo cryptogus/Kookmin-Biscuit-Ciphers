@@ -8,6 +8,6 @@ add_subdirectory(padding)
 set(crypto_OBJS ${crypto_OBJS} ${PADDING})
 
 # ${PROJECT_SOURCE_DIR}
-add_library(KMS SHARED ${crypto_OBJS})
+add_library(KBC SHARED ${crypto_OBJS})
 # 컴파일 옵션 설정
 # target_compile_options(KMS PRIVATE -fPIC)
