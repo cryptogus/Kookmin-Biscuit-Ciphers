@@ -1,7 +1,12 @@
 # Kookmin Block Cipher (KBC) Test용
-KBC is an C program for testing block cipher
+KBC is an C program for testing block cipher.
 
-Currently, it has been tested only on Linux
+Currently, it has been tested only on Linux.  
+
+**Environmental System Information**\
+CPU: quad core 11th Gen Intel Core i7-1165G7\
+Kernel: 5.15.133.1-microsoft-standard-WSL2 x86_64\
+RAM: 7.6 GiB
 ## Status
 
 **Padding**
@@ -38,6 +43,16 @@ On Ubuntu:
 
 3. Test
     ```bash
+    $ cd test
     ```
+    You can test each function in this test directory.  
+
+    example:
+    ```bash
+    $ ./aes-test
+    ```
+
+4. After completing course 2, run `openKBC` from the build directory.
+
 
 
