@@ -40,6 +40,19 @@ On Ubuntu:
     $ cmake -B build -S . && cd build
     $ make -j$(nproc)
     ```
+    ```bash
+    계층 구조
+    
+    build/
+    ├── openKBC
+    ├── src/
+    │   └── libKBC.so
+    └── test/
+        ├── CBC_test
+        ├── ECB_test
+        ├── aes_test
+        └── padding_test
+    ```
 
 3. Test
     ```bash
@@ -54,5 +67,6 @@ On Ubuntu:
 
 4. After completing course 2, run `openKBC` from the build directory.
 
+5. The `KBC` dynamic library is created at the `build/src` location.
 
 
