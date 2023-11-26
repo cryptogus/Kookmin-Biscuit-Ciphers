@@ -90,6 +90,7 @@ int main(int argc, char *argv[]) {
             usage();
             return 3;
         }
+        // pipo 암호 알고리즘을 추가한다면 블록 크기가 8인 것음 염두하여 BLOCK_SIZE 변수에 대한 조치가 필요
 
         if (strcmp(argv[3], "ecb") == 0){
             // argv[5]에 16자리 문자열을 입력하면 실제 메모리에는 '\0' 포함 17-byte를 사용하지만 ECB 함수에서는 새로운 변수에 키 길이만큼(strlen 사용)만 사용하기에 그대로 인자로 넘겨주기에 문제 없음
