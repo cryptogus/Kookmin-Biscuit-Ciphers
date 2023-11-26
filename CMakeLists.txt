@@ -11,5 +11,5 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 include_directories(apps)
-add_executable(${CMAKE_PROJECT_NAME} apps/main.c)
+add_executable(${CMAKE_PROJECT_NAME} apps/openKMS.c)
 target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC KMS)
