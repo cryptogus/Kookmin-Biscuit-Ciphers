@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define SIZE 2				//64 = 32 * 2
 #define INT_NUM 2			//64 = 32 * 2
