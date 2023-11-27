@@ -2,6 +2,8 @@ set(crypto_OBJS "")
 
 add_subdirectory(aes)
 set(crypto_OBJS ${crypto_OBJS} ${AES128})
+add_subdirectory(pipo)
+set(crypto_OBJS ${crypto_OBJS} ${PIPO})
 add_subdirectory(mode)
 set(crypto_OBJS ${crypto_OBJS} ${MODE})
 add_subdirectory(padding)
