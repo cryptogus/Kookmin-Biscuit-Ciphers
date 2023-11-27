@@ -58,6 +58,5 @@ void CBC_dec(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint
             IV[j] = buffer[j + tmp];
             // pipo로 인한 갱신전: IV[j] = src[j + tmp];
 	    }
-        printf("\n");
     }
 }
