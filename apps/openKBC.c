@@ -23,6 +23,9 @@ void help()
     printf("ciphers:\n");
     printf("aes128\t");
 
+    printf("\n");
+    printf("pipo64/128\tpipo64/256");
+
     printf("\n\n");
     printf("modes of operation:\n");
     printf("ecb\tcbc\n");
@@ -79,19 +82,26 @@ int main(int argc, char *argv[]) {
     void (*cipher)(uint8_t *, uint8_t *, uint8_t *);
     
     enc:
-        // pkcs7 padding
-        size_t len = 0;
-        unsigned char *pad_plainText = pkcs7_padding((unsigned char *)argv[4], BLOCK_SIZE, &len);
-        unsigned char *cipherText = calloc(sizeof(unsigned char), len);
 
         if (strcmp(argv[2], "aes128") == 0){
             cipher = AES128_Encrypt;
+        }else if (strcmp(argv[2], "pipo64/128") == 0){
+            // 함수 포인터 형변환
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO128_ENC;
+            BLOCK_SIZE = 8;
+        }else if (strcmp(argv[2], "pipo64/256") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO256_ENC;
+            BLOCK_SIZE = 8;
         }else{
             usage();
             return 3;
         }
-        // pipo 암호 알고리즘을 추가한다면 블록 크기가 8인 것음 염두하여 BLOCK_SIZE 변수에 대한 조치가 필요
 
+        // pkcs7 padding
+        size_t len = 0;
+        unsigned char *pad_plainText = pkcs7_padding((unsigned char *)argv[4], BLOCK_SIZE, &len);
+        unsigned char *cipherText = calloc(sizeof(unsigned char), len);
+        
         if (strcmp(argv[3], "ecb") == 0){
             // argv[5]에 16자리 문자열을 입력하면 실제 메모리에는 '\0' 포함 17-byte를 사용하지만 ECB 함수에서는 새로운 변수에 키 길이만큼(strlen 사용)만 사용하기에 그대로 인자로 넘겨주기에 문제 없음
             ECB(cipher, (unsigned char *)argv[5],BLOCK_SIZE, len, pad_plainText, cipherText);
@@ -126,14 +136,20 @@ int main(int argc, char *argv[]) {
         
         if (strcmp(argv[2], "aes128") == 0){
             cipher = AES128_Decrypt;
+        }else if (strcmp(argv[2], "pipo64/128") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO128_DEC;
+            BLOCK_SIZE = 8;
+        }else if (strcmp(argv[2], "pipo64/256") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO256_DEC;
+            BLOCK_SIZE = 8;
         }else{
             usage();
             return 3;
         }
 
-        if (strcmp(argv[3], "ecb") == 0){
+        if (strcmp(argv[3], "ecb") == 0) {
             ECB(cipher, (unsigned char *)argv[5],BLOCK_SIZE, byteLength, cipherText2, decPlainText);
-        }else if (strcmp(argv[3], "cbc") == 0){
+        }else if (strcmp(argv[3], "cbc") == 0) {
             CBC_dec(cipher, (unsigned char *)argv[6], (unsigned char *)argv[5],BLOCK_SIZE, byteLength, cipherText2, decPlainText);
         }else {
             usage();
@@ -142,15 +158,17 @@ int main(int argc, char *argv[]) {
         /*for (size_t i = 0; i < byteLength; i++){
             printf("%02x ", decPlainText[i]);
         }*/
-        decPlainText = pkcs7_depadding(decPlainText, &byteLength);
+        
+        unsigned char *decPlainText2 = pkcs7_depadding(decPlainText, &byteLength);
         /*for (size_t i = 0; i < byteLength; i++){
-            printf("%02x ", decPlainText[i]);
+            printf("%02x ", decPlainText2[i]);
         }*/
         printf("plaintext: ");
-        printf("%s\n", decPlainText);
+        printf("%s\n", decPlainText2);
 
         free(cipherText2);
         free(decPlainText);
+        free(decPlainText2);
 
         return 0;
 }
