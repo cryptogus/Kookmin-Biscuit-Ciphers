@@ -13,14 +13,25 @@ int main(void)
     unsigned char *dec_key;
     unsigned char *cipherText;
 	
-    // Test Vector
+    //PIPO-64/128,PIPO-64/256 test vector
     PLAIN_TEXT[0] = 0x1E270026;
 	PLAIN_TEXT[1] = 0x098552F6;
     
-    MASTER_KEY[0] = 0x2E152297;
-	MASTER_KEY[1] = 0x7E1D20AD;
-	MASTER_KEY[2] = 0x779428D2;
+    // PIPO-64/128 test vector
+    // MASTER_KEY[0] = 0x2E152297;
+	// MASTER_KEY[1] = 0x7E1D20AD;
+	// MASTER_KEY[2] = 0x779428D2;
+	// MASTER_KEY[3] = 0x6DC416DD;
+
+    // PIPO-64/256 test vector
+	MASTER_KEY[7] = 0x009A3AA4;
+	MASTER_KEY[6] = 0x76A96DB5;
+	MASTER_KEY[5] = 0x54A71206;
+	MASTER_KEY[4] = 0x26D15633;
 	MASTER_KEY[3] = 0x6DC416DD;
+	MASTER_KEY[2] = 0x779428D2;
+	MASTER_KEY[1] = 0x7E1D20AD;
+	MASTER_KEY[0] = 0x2E152297;
 
     // 구현한 PIPO의 암복호화 결과를 담을 배열
     unsigned char usr_plainText[8] = {0,};
@@ -41,7 +52,7 @@ int main(void)
 	}
 	printf("\n\n=================================================================\n");
 
-    PIPO128_ENC((u32*)usr_cipherText, (u32*)plainText, MASTER_KEY);
+    PIPO256_ENC((u32*)usr_cipherText, (u32*)plainText, MASTER_KEY);
 
     printf("PIPO128 Encryption success\n\n");
     printf("Encryption result: ");
@@ -49,7 +60,7 @@ int main(void)
 		printf("%02x ", usr_cipherText[i]);
 	}
     printf("\n=================================================================\n");
-    PIPO128_DEC((u32*)usr_plainText, (u32*)usr_cipherText, MASTER_KEY);
+    PIPO256_DEC((u32*)usr_plainText, (u32*)usr_cipherText, MASTER_KEY);
 
     printf("PIPO128 Decryption success\n\n");
     printf("Decryption result: ");
