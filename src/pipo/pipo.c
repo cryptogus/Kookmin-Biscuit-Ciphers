@@ -154,8 +154,7 @@ void PIPO128_ENC(u32* CIPHER_TEXT, u32* PLAIN_TEXT, u32* MASTER_KEY) {
 		//printf("\n  R After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
 		keyadd(P, RK + (i * 8));
 		//printf("\n  K Add: %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-		printf("\nROUND %02i: %02X%02X%02X%02X, %02X%02X%02X%02X", i, P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-
+		
 	}
 	
     memcpy(CIPHER_TEXT, (u32 *)P, 8);
