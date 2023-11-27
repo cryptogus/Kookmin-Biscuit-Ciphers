@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <stdint.h>
-
-typedef unsigned char byte;
-typedef uint32_t word;
-
-//Little Endian
-#define GETU32(pt) (((word)(pt)[3] << 24) ^ ((word)(pt)[2] << 16) ^ ((word)(pt)[1] <<  8) ^ ((word)(pt)[0]))
-#define PUTU32(ct, st) { (ct)[3] = (byte)((st) >> 24); (ct)[2] = (byte)((st) >> 16); (ct)[1] = (byte)((st) >>  8); (ct)[0] = (byte)(st); }
+#include "lea.h"
 
 void byte2state(byte b[16], word state[4]) {
 	state[0] = GETU32(b);
@@ -31,14 +23,14 @@ word ROR(word x, word i) {
 //#define ROL(x,i)  ((x)<<(i)) | ((x)>>(32 - (i)))
 //#define ROR(x,i)  ((x)>>(i)) | ((x)<<(32 - (i)))
 
-void round_func(word X[]/*input*/, word rk[]/*�ش� ����Ű*/, word state[]/*output*/) {
+void round_func(word X[]/*input*/, word rk[], word state[]/*output*/) {
 	state[0] = ROL(((X[0] ^ rk[0]) + (X[1] ^ rk[1])) & 0xffffffff, 9);
 	state[1] = ROR(((X[1] ^ rk[2]) + (X[2] ^ rk[3])) & 0xffffffff, 5);
 	state[2] = ROR(((X[2] ^ rk[4]) + (X[3] ^ rk[5])) & 0xffffffff, 3);
 	state[3] = X[0];
 }
 
-void LEA_Key_Schedule(word Key[], word rk[][6]) {
+void LEA128_KeySchedule(word Key[], word rk[][6]) {
 	
     word T[4] = { 0, };
 	
