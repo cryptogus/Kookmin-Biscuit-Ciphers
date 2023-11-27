@@ -122,40 +122,6 @@ void inv_pbox(u8* X)
 	X[7] = ((X[7] << 6)) | ((X[7] >> 2));
 }
 
-void PIPO_ENC(u32* PLAIN_TEXT, u32* ROUND_KEY, u32* CIPHER_TEXT, int ROUND) {
-	int i = 0;
-	u8* P = (u8*)PLAIN_TEXT;
-	u8* RK = (u8*)ROUND_KEY;
-
-	keyadd(P, RK);
-
-	for (i = 1; i < ROUND+1; i++)
-	{
-		//printf("\n  S Before : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-		sbox(P);
-		//printf("\n  S After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-		pbox(P);
-		//printf("\n  R After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-		keyadd(P, RK + (i * 8));
-		//printf("\n  K Add: %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
-
-	}
-}
-
-void PIPO_DEC(u32* CIPHER_TEXT, u32* ROUND_KEY, u32* PLAIN_TEXT, int ROUND) {
-	int i = 0;
-	u8* C = (u8*)CIPHER_TEXT;
-	u8* RK = (u8*)ROUND_KEY;
-	
-	for (i = ROUND; i > 0; i--)
-	{
-		keyadd(C, RK + (i * 8));
-		inv_pbox(C);
-		inv_sbox(C);
-	}
-	keyadd(C, RK);
-}
-
 void ROUND_KEY_GEN(int ROUND, u32* MASTER_KEY, int MASTER_KEY_SIZE, u32* ROUND_KEY) {
 	u32 i, j;
 	u32 RCON = 0;
@@ -167,4 +133,92 @@ void ROUND_KEY_GEN(int ROUND, u32* MASTER_KEY, int MASTER_KEY_SIZE, u32* ROUND_K
 		RCON++;
 
 	}	
+}
+
+void PIPO128_ENC(u32* CIPHER_TEXT, u32* PLAIN_TEXT, u32* MASTER_KEY) {
+	int i = 0;
+	u8* P = (u8*)PLAIN_TEXT;
+
+    u32 ROUND_KEY[28] = {0,};
+    ROUND_KEY_GEN(13, MASTER_KEY, 128, ROUND_KEY);
+	u8* RK = (u8*)ROUND_KEY;
+
+	keyadd(P, RK);
+
+	for (i = 1; i < 14; i++)
+	{
+		//printf("\n  S Before : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		sbox(P);
+		//printf("\n  S After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		pbox(P);
+		//printf("\n  R After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		keyadd(P, RK + (i * 8));
+		//printf("\n  K Add: %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+
+	}
+
+    memcpy(CIPHER_TEXT, (u32 *)P, 8);
+}
+
+void PIPO256_ENC(u32* CIPHER_TEXT, u32* PLAIN_TEXT, u32* MASTER_KEY) {
+	int i = 0;
+	u8* P = (u8*)PLAIN_TEXT;
+
+    u32 ROUND_KEY[36] = {0,};
+    ROUND_KEY_GEN(17, MASTER_KEY, 256, ROUND_KEY);
+	u8* RK = (u8*)ROUND_KEY;
+
+	keyadd(P, RK);
+
+	for (i = 1; i < 18; i++)
+	{
+		//printf("\n  S Before : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		sbox(P);
+		//printf("\n  S After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		pbox(P);
+		//printf("\n  R After : %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+		keyadd(P, RK + (i * 8));
+		//printf("\n  K Add: %02X %02X %02X %02X, %02X %02X %02X %02X", P[7], P[6], P[5], P[4], P[3], P[2], P[1], P[0]);
+
+	}
+
+    memcpy(CIPHER_TEXT, (u32 *)P, 8);
+}
+
+void PIPO128_DEC(u32* PLAIN_TEXT, u32* CIPHER_TEXT, u32* MASTER_KEY) {
+	int i = 0;
+	u8* C = (u8*)CIPHER_TEXT;
+
+	u32 ROUND_KEY[28] = {0,};
+    ROUND_KEY_GEN(13, MASTER_KEY, 128, ROUND_KEY);
+	u8* RK = (u8*)ROUND_KEY;
+	
+	for (i = 13; i > 0; i--)
+	{
+		keyadd(C, RK + (i * 8));
+		inv_pbox(C);
+		inv_sbox(C);
+	}
+	keyadd(C, RK);
+
+    memcpy(PLAIN_TEXT, (u32 *)C, 8);
+}
+
+void PIPO256_DEC(u32* PLAIN_TEXT, u32* CIPHER_TEXT, u32* MASTER_KEY) {
+	int i = 0;
+	u8* C = (u8*)CIPHER_TEXT;
+
+	u32 ROUND_KEY[36] = {0,};
+    ROUND_KEY_GEN(17, MASTER_KEY, 256, ROUND_KEY);
+	u8* RK = (u8*)ROUND_KEY;
+	
+	for (i = 17; i > 0; i--)
+	{
+		keyadd(C, RK + (i * 8));
+		inv_pbox(C);
+		inv_sbox(C);
+	}
+	keyadd(C, RK);
+
+    memcpy(PLAIN_TEXT, (u32 *)C, 8);
 }
