@@ -4,7 +4,7 @@
 void ECB(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des) {
 
     // 256-bit 까지 사용가능하도록 넉넉하게 잡음
-    uint8_t key2[32];
+    uint8_t key2[32] = {0, };
 
     int k = 0;
     if (block_size == 16)
