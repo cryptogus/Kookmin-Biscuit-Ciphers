@@ -17,7 +17,7 @@ RAM: 7.6 GiB
 - LEA:
 - ARIA:
 - SEED:
-- PIPO:
+- PIPO: PIPO64/128, PIPO64/256
 
 **Modes of Operation**
 - ECB
@@ -51,6 +51,7 @@ On Ubuntu:
         ├── CBC_test
         ├── ECB_test
         ├── aes_test
+        ├── pipo_test
         └── padding_test
     ```
 
