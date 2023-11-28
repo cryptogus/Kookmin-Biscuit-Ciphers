@@ -108,29 +108,29 @@ void LEA128_DEC(word plaintext[], word ciphertext[], word Key[]) {
 	LEA_Key_Schedule(Key, rk);
 	
 	
-	round_func(plaintext, rk[0], state);
-	round_func(state, rk[1], state2);
-	round_func(state2, rk[2], state);
-	round_func(state, rk[3], state2);
-	round_func(state2, rk[4], state);
-	round_func(state, rk[5], state2);
-	round_func(state2, rk[6], state);
-	round_func(state, rk[7], state2);
-	round_func(state2, rk[8], state);
-	round_func(state, rk[9], state2);
-	round_func(state2, rk[10], state);
-	round_func(state, rk[11], state2);
-	round_func(state2, rk[12], state);
-	round_func(state, rk[13], state2);
-	round_func(state2, rk[14], state);
-	round_func(state, rk[15], state2);
-	round_func(state2, rk[16], state);
-	round_func(state, rk[17], state2);
-	round_func(state2, rk[18], state);
-	round_func(state, rk[19], state2);
-	round_func(state2, rk[20], state);
-	round_func(state, rk[21], state2);
-	round_func(state2, rk[22], state);
-	round_func(state, rk[23], ciphertext);
+	round_func_dec(ciphertext, rk[23], state);
+	round_func_dec(state, rk[22], state2);
+	round_func_dec(state2, rk[21], state);
+	round_func_dec(state, rk[20], state2);
+	round_func_dec(state2, rk[19], state);
+	round_func_dec(state, rk[18], state2);
+	round_func_dec(state2, rk[17], state);
+	round_func_dec(state, rk[16], state2);
+	round_func_dec(state2, rk[15], state);
+	round_func_dec(state, rk[14], state2);
+	round_func_dec(state2, rk[13], state);
+	round_func_dec(state, rk[12], state2);
+	round_func_dec(state2, rk[11], state);
+	round_func_dec(state, rk[10], state2);
+	round_func_dec(state2, rk[9], state);
+	round_func_dec(state, rk[8], state2);
+	round_func_dec(state2, rk[7], state);
+	round_func_dec(state, rk[6], state2);
+	round_func_dec(state2, rk[5], state);
+	round_func_dec(state, rk[4], state2);
+	round_func_dec(state2, rk[3], state);
+	round_func_dec(state, rk[2], state2);
+	round_func_dec(state2, rk[1], state);
+	round_func_dec(state, rk[0], plaintext);
 	
 }
