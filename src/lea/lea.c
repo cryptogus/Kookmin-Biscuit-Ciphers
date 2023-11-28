@@ -23,11 +23,18 @@ word ROR(word x, word i) {
 //#define ROL(x,i)  ((x)<<(i)) | ((x)>>(32 - (i)))
 //#define ROR(x,i)  ((x)>>(i)) | ((x)<<(32 - (i)))
 
-void round_func(word X[]/*input*/, word rk[], word state[]/*output*/) {
+void round_func_enc(word X[]/*input*/, word rk[], word state[]/*output*/) {
 	state[0] = ROL(((X[0] ^ rk[0]) + (X[1] ^ rk[1])) & 0xffffffff, 9);
 	state[1] = ROR(((X[1] ^ rk[2]) + (X[2] ^ rk[3])) & 0xffffffff, 5);
 	state[2] = ROR(((X[2] ^ rk[4]) + (X[3] ^ rk[5])) & 0xffffffff, 3);
 	state[3] = X[0];
+}
+
+void round_func_dec(word X[]/*input*/, word rk[], word state[]/*output*/) {
+	state[0] = X[3];
+	state[1] = (ROR(X[0], 9) - (state[0] ^ rk[0])) ^ rk[1];
+	state[2] = (ROL(X[1], 5) - (state[1] ^ rk[2])) ^ rk[3];
+	state[3] = (ROL(X[2], 3) - (state[2] ^ rk[4])) ^ rk[5];
 }
 
 void LEA128_KeySchedule(word Key[], word rk[][6]) {
@@ -58,6 +65,41 @@ void LEA128_KeySchedule(word Key[], word rk[][6]) {
 }
 
 void LEA128_ENC(word ciphertext[], word plaintext[], word Key[]) {
+	
+	word rk[24][6] = { 0, };
+	word state[4] = { 0, };
+	word state2[4] = { 0, };
+
+	LEA_Key_Schedule(Key, rk);
+	
+	
+	round_func_enc(plaintext, rk[0], state);
+	round_func_enc(state, rk[1], state2);
+	round_func_enc(state2, rk[2], state);
+	round_func_enc(state, rk[3], state2);
+	round_func_enc(state2, rk[4], state);
+	round_func_enc(state, rk[5], state2);
+	round_func_enc(state2, rk[6], state);
+	round_func_enc(state, rk[7], state2);
+	round_func_enc(state2, rk[8], state);
+	round_func_enc(state, rk[9], state2);
+	round_func_enc(state2, rk[10], state);
+	round_func_enc(state, rk[11], state2);
+	round_func_enc(state2, rk[12], state);
+	round_func_enc(state, rk[13], state2);
+	round_func_enc(state2, rk[14], state);
+	round_func_enc(state, rk[15], state2);
+	round_func_enc(state2, rk[16], state);
+	round_func_enc(state, rk[17], state2);
+	round_func_enc(state2, rk[18], state);
+	round_func_enc(state, rk[19], state2);
+	round_func_enc(state2, rk[20], state);
+	round_func_enc(state, rk[21], state2);
+	round_func_enc(state2, rk[22], state);
+	round_func_enc(state, rk[23], ciphertext);
+}
+
+void LEA128_DEC(word plaintext[], word ciphertext[], word Key[]) {
 	
 	word rk[24][6] = { 0, };
 	word state[4] = { 0, };
