@@ -70,7 +70,7 @@ void LEA128_ENC(word ciphertext[], word plaintext[], word Key[]) {
 	word state[4] = { 0, };
 	word state2[4] = { 0, };
 
-	LEA_Key_Schedule(Key, rk);
+	LEA128_KeySchedule(Key, rk);
 	
 	
 	round_func_enc(plaintext, rk[0], state);
@@ -105,7 +105,7 @@ void LEA128_DEC(word plaintext[], word ciphertext[], word Key[]) {
 	word state[4] = { 0, };
 	word state2[4] = { 0, };
 
-	LEA_Key_Schedule(Key, rk);
+	LEA128_KeySchedule(Key, rk);
 	
 	
 	round_func_dec(ciphertext, rk[23], state);
