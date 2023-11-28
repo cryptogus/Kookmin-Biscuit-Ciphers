@@ -92,6 +92,8 @@ int main(int argc, char *argv[]) {
         }else if (strcmp(argv[2], "pipo64/256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO256_ENC;
             BLOCK_SIZE = 8;
+        }else if (strcmp(argv[2], "lea128") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA128_ENC;
         }else{
             usage();
             return 3;
@@ -142,6 +144,8 @@ int main(int argc, char *argv[]) {
         }else if (strcmp(argv[2], "pipo64/256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO256_DEC;
             BLOCK_SIZE = 8;
+        }else if (strcmp(argv[2], "lea128") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA128_DEC;
         }else{
             usage();
             return 3;

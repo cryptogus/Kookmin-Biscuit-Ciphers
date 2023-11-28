@@ -64,7 +64,7 @@ void LEA128_KeySchedule(word Key[], word rk[][6]) {
 	}
 }
 
-void LEA128_ENC(word ciphertext[], word plaintext[], word Key[]) {
+void LEA128_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]) {
 	
 	word rk[24][6] = { 0, };
 	word state[4] = { 0, };
@@ -99,7 +99,7 @@ void LEA128_ENC(word ciphertext[], word plaintext[], word Key[]) {
 	round_func_enc(state, rk[23], ciphertext);
 }
 
-void LEA128_DEC(word plaintext[], word ciphertext[], word Key[]) {
+void LEA128_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]) {
 	
 	word rk[24][6] = { 0, };
 	word state[4] = { 0, };
