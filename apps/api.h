@@ -19,6 +19,12 @@ void PIPO256_DEC(u32* PLAIN_TEXT, u32* CIPHER_TEXT, u32* MASTER_KEY);
 void LEA128_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
 void LEA128_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
 
+void LEA192_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
+void LEA192_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
+
+void LEA256_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
+void LEA256_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
+
 unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *len);
 unsigned char *pkcs7_depadding(unsigned char *input, size_t *len);
 

@@ -94,6 +94,10 @@ int main(int argc, char *argv[]) {
             BLOCK_SIZE = 8;
         }else if (strcmp(argv[2], "lea128") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA128_ENC;
+        }else if (strcmp(argv[2], "lea192") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_ENC;
+        }else if (strcmp(argv[2], "lea256") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_ENC;
         }else{
             usage();
             return 3;
@@ -146,6 +150,10 @@ int main(int argc, char *argv[]) {
             BLOCK_SIZE = 8;
         }else if (strcmp(argv[2], "lea128") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA128_DEC;
+        }else if (strcmp(argv[2], "lea192") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_DEC;
+        }else if (strcmp(argv[2], "lea256") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_DEC;
         }else{
             usage();
             return 3;
