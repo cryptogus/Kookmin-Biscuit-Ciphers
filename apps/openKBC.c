@@ -20,14 +20,17 @@ void help()
     printf("-e encrypt\n");
     printf("-d decrypt\n\n");
     
-    printf("ciphers:\n");
+    printf("Block ciphers commands:\n");
     printf("aes128\t");
 
     printf("\n");
     printf("pipo64/128\tpipo64/256");
 
+    printf("\n");
+    printf("lea128\tlea192\tlea256");
+
     printf("\n\n");
-    printf("modes of operation:\n");
+    printf("Modes of operation commands:\n");
     printf("ecb\tcbc\n");
 
 }

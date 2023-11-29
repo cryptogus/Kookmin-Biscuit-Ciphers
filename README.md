@@ -14,7 +14,7 @@ RAM: 7.6 GiB
 
 **Block Ciphers**
 - AES: AES-128,
-- LEA:
+- LEA: LEA-128, LEA-192, LEA-256
 - ARIA:
 - SEED:
 - PIPO: PIPO64/128, PIPO64/256
