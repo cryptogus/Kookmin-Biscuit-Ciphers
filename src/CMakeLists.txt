@@ -1,7 +1,7 @@
 set(crypto_OBJS "")
 
 add_subdirectory(aes)
-set(crypto_OBJS ${crypto_OBJS} ${AES128})
+set(crypto_OBJS ${crypto_OBJS} ${AES})
 add_subdirectory(pipo)
 set(crypto_OBJS ${crypto_OBJS} ${PIPO})
 add_subdirectory(lea)

@@ -1,5 +1,5 @@
 include_directories(../src/aes/ ../src/pipo/ ../src/lea ../src/padding ../src/mode)
-add_executable(aes_test ../src/aes/aes128.c AES128-test.c)
+add_executable(aes_test ../src/aes/aes.c AES-test.c)
 add_executable(pipo_test ../src/pipo/pipo.c PIPO-test.c)
 add_executable(lea_test ../src/lea/lea.c LEA-test.c)
 add_executable(padding_test ../src/padding/pkcs7.c pkcs7-test.c)
