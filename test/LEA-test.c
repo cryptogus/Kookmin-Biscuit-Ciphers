@@ -31,4 +31,30 @@ int main() {
     LEA128_DEC(uPlaintext, Ciphertext, Key);
 	for (int i = 0; i < 4; i++)
 		printf("%08x ", uPlaintext[i]);
+	printf("\n\n");
+
+	word Plaintext3[4] = {0x23222120, 0x27262524, 0x2b2a2928, 0x2f2e2d2c};
+	word Key3[6] = { 0x3c2d1e0f, 0x78695a4b, 0xb4a59687, 0xf0e1d2c3, 0xc3d2e1f0, 0x8796a5b4 };
+	word Ciphertext3[4] = { 0, }; // 325eb96f 871bad5a 35f5dc8c f2c67476
+    word uPlaintext3[4] = {0, };
+	LEA192_ENC(Ciphertext3, Plaintext3, Key3);
+	for (int i = 0; i < 4; i++)
+		printf("%08x ", Ciphertext3[i]);
+    printf("\n");
+    LEA192_DEC(uPlaintext3, Ciphertext3, Key3);
+	for (int i = 0; i < 4; i++)
+		printf("%08x ", uPlaintext3[i]);
+	printf("\n\n");
+	
+	word Plaintext4[4] = {0x33323130, 0x37363534, 0x3b3a3938, 0x3f3e3d3c};
+	word Key4[8] = { 0x3c2d1e0f, 0x78695a4b, 0xb4a59687, 0xf0e1d2c3, 0xc3d2e1f0, 0x8796a5b4, 0x4b5a6978, 0x0f1e2d3c };
+	word Ciphertext4[4] = { 0, }; // f6af51d6 c189b147 ca00893a 97e1f927
+    word uPlaintext4[4] = {0, };
+	LEA256_ENC(Ciphertext4, Plaintext4, Key4);
+	for (int i = 0; i < 4; i++)
+		printf("%08x ", Ciphertext4[i]);
+    printf("\n");
+    LEA256_DEC(uPlaintext4, Ciphertext4, Key4);
+	for (int i = 0; i < 4; i++)
+		printf("%08x ", uPlaintext4[i]);
 }

@@ -11,3 +11,9 @@ typedef uint32_t word;
 
 void LEA128_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
 void LEA128_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
+
+void LEA192_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
+void LEA192_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
+
+void LEA256_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
+void LEA256_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
