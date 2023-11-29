@@ -52,6 +52,7 @@ On Ubuntu:
         ├── ECB_test
         ├── aes_test
         ├── pipo_test
+        ├── lea_test
         └── padding_test
     ```
 
@@ -68,6 +69,6 @@ On Ubuntu:
 
 4. After completing course 2, run `openKBC` from the build directory.
 
-5. The `KBC` dynamic library is created at the `build/src` location.
+5. The `KBC` dynamic library is created at the `build/src` location. (Using with api.h)
 
 
