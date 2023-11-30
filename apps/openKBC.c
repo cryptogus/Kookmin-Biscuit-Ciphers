@@ -21,7 +21,7 @@ void help()
     printf("-d decrypt\n\n");
     
     printf("Block ciphers commands:\n");
-    printf("aes128\taes192");
+    printf("aes128\taes192\taes256");
 
     printf("\n");
     printf("pipo64/128\tpipo64/256");
