@@ -21,7 +21,7 @@ void help()
     printf("-d decrypt\n\n");
     
     printf("Block ciphers commands:\n");
-    printf("aes128\t");
+    printf("aes128\taes192");
 
     printf("\n");
     printf("pipo64/128\tpipo64/256");
@@ -88,6 +88,8 @@ int main(int argc, char *argv[]) {
 
         if (strcmp(argv[2], "aes128") == 0){
             cipher = AES128_Encrypt;
+        }else if (strcmp(argv[2], "aes192") == 0){
+            cipher = AES192_Encrypt;
         }else if (strcmp(argv[2], "pipo64/128") == 0){
             // 함수 포인터 형변환
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO128_ENC;
@@ -145,6 +147,8 @@ int main(int argc, char *argv[]) {
         
         if (strcmp(argv[2], "aes128") == 0){
             cipher = AES128_Decrypt;
+        }else if (strcmp(argv[2], "aes192") == 0){
+            cipher = AES192_Decrypt;
         }else if (strcmp(argv[2], "pipo64/128") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO128_DEC;
             BLOCK_SIZE = 8;
