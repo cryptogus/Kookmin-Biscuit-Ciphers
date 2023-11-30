@@ -113,11 +113,70 @@ int main(void)
     {
         if (usr_plainText[i] != usr_plainText2[i])
         {
-           fprintf(stderr, "AES128 Decryption fail\n");
+           fprintf(stderr, "AES192 Decryption fail\n");
            return -2;
         }
     }
     printf("AES192 Decryption success\n\n");
+    printf("Decryption result: ");
+    for (int i = 0; i < 16; i++) {
+		printf("%02x ", usr_plainText[i]);
+	}
+    printf("\n=================================================================\n");
+
+    unsigned char usr_plainText3[16] = {0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77,
+                                        0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff};
+    uint8_t key256[32] = {
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+        0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+        0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+        0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f
+    };
+    unsigned char usr_cipherText3[16] = {0,};
+    uint8_t data2[16] = {
+         0x8e, 0xa2, 0xb7, 0xca, 0x51, 0x67, 0x45, 0xbf,
+        0xea, 0xfc, 0x49, 0x90, 0x4b, 0x49, 0x60, 0x89
+    };
+    // expect: bd334f1d6e45f25ff712a214571fa5cc
+    
+    printf("[ plain text ] - ");
+	for (int i = 0; i < 16; i++) {
+		printf("%02x ", usr_plainText3[i]);
+	}
+	printf("\n\n");
+    
+	printf("[     key    ] - ");
+	for (int i = 0; i < 24; i++) {
+		printf("%02x ", key256[i]);
+	}
+	printf("\n\n==============================AES192 test===================================\n");
+
+    AES256_Encrypt(usr_cipherText3, usr_plainText3, key256);
+    for (int i = 0; i < 16; i++)
+    {
+        if (usr_cipherText3[i] != data2[i])
+        {
+           fprintf(stderr, "AES256 Encryption fail\n");
+           return -1;
+        }
+    }
+    printf("AES256 Encryption success\n\n");
+    printf("Encryption result: ");
+    for (int i = 0; i < 16; i++) {
+		printf("%02x ", usr_cipherText3[i]);
+	}
+    printf("\n=================================================================\n");
+    AES256_Decrypt(usr_plainText, usr_cipherText3, key256);
+
+    for (int i = 0; i < 16; i++)
+    {
+        if (usr_plainText[i] != usr_plainText3[i])
+        {
+           fprintf(stderr, "AES256 Decryption fail\n");
+           return -2;
+        }
+    }
+    printf("AES256 Decryption success\n\n");
     printf("Decryption result: ");
     for (int i = 0; i < 16; i++) {
 		printf("%02x ", usr_plainText[i]);

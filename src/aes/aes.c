@@ -627,3 +627,197 @@ void AES192_Decrypt(uint8_t plainText[16] ,uint8_t cipherText[16], uint8_t key[1
         plainText[j] = state[j];
     }
 }
+
+// key 확장: on-the-fly
+void AES256_KeySchedule(uint8_t round, uint8_t key[])
+{
+
+}
+
+//key 확장 ver2: Round Key를 미리 만들어둠
+void AES256_KeySchedule_2(uint8_t key[], uint8_t roundKey[][16])
+{
+    
+	for (int j = 0; j < 16; j++) //word 0~3
+		roundKey[0][j] = key[j];
+    for (int j = 0; j < 16; j++) //word 4~7
+		roundKey[1][j] = key[j + 16];
+    
+    // word 8
+	roundKey[2][0] = roundKey[0][0] ^ round_Constant[0] ^ Sbox[roundKey[1][13]];//G func
+	roundKey[2][1] = roundKey[0][1] ^ Sbox[roundKey[1][14]];
+	roundKey[2][2] = roundKey[0][2] ^ Sbox[roundKey[1][15]];
+	roundKey[2][3] = roundKey[0][3] ^ Sbox[roundKey[1][12]];
+    //word 9~11
+	for (int i = 0; i < 12; i++)
+		roundKey[2][i + 4] = roundKey[2][i] ^ roundKey[0][i + 4];
+    // word 12
+    roundKey[3][0] = roundKey[1][0] ^ Sbox[roundKey[2][12]];
+    roundKey[3][1] = roundKey[1][1] ^ Sbox[roundKey[2][13]];
+    roundKey[3][2] = roundKey[1][2] ^ Sbox[roundKey[2][14]];
+    roundKey[3][3] = roundKey[1][3] ^ Sbox[roundKey[2][15]];
+    // word 13~15
+	for (int i = 0; i < 12; i++)
+		roundKey[3][i + 4] = roundKey[3][i] ^ roundKey[1][i + 4];
+    
+    // word 16
+    roundKey[4][0] = roundKey[2][0] ^ round_Constant[1] ^ Sbox[roundKey[3][13]];//G func
+	roundKey[4][1] = roundKey[2][1] ^ Sbox[roundKey[3][14]];
+	roundKey[4][2] = roundKey[2][2] ^ Sbox[roundKey[3][15]];
+	roundKey[4][3] = roundKey[2][3] ^ Sbox[roundKey[3][12]];
+    // word 17~19
+	for (int i = 0; i < 12; i++)
+		roundKey[4][i + 4] = roundKey[4][i] ^ roundKey[2][i + 4];
+    // word 20
+    roundKey[5][0] = roundKey[3][0] ^ Sbox[roundKey[4][12]];
+    roundKey[5][1] = roundKey[3][1] ^ Sbox[roundKey[4][13]];
+    roundKey[5][2] = roundKey[3][2] ^ Sbox[roundKey[4][14]];
+    roundKey[5][3] = roundKey[3][3] ^ Sbox[roundKey[4][15]];
+    // word 21~23
+    for (int i = 0; i < 12; i++)
+		roundKey[5][i + 4] = roundKey[5][i] ^ roundKey[3][i + 4];
+    
+    // word 24
+    roundKey[6][0] = roundKey[4][0] ^ round_Constant[2] ^ Sbox[roundKey[5][13]];//G func
+	roundKey[6][1] = roundKey[4][1] ^ Sbox[roundKey[5][14]];
+	roundKey[6][2] = roundKey[4][2] ^ Sbox[roundKey[5][15]];
+	roundKey[6][3] = roundKey[4][3] ^ Sbox[roundKey[5][12]];
+    // word 25~27
+	for (int i = 0; i < 12; i++)
+		roundKey[6][i + 4] = roundKey[6][i] ^ roundKey[4][i + 4];
+    // word 28
+    roundKey[7][0] = roundKey[5][0] ^ Sbox[roundKey[6][12]];
+    roundKey[7][1] = roundKey[5][1] ^ Sbox[roundKey[6][13]];
+    roundKey[7][2] = roundKey[5][2] ^ Sbox[roundKey[6][14]];
+    roundKey[7][3] = roundKey[5][3] ^ Sbox[roundKey[6][15]];
+    // word 29~31
+    for (int i = 0; i < 12; i++)
+		roundKey[7][i + 4] = roundKey[7][i] ^ roundKey[5][i + 4];
+    
+    // word 32
+    roundKey[8][0] = roundKey[6][0] ^ round_Constant[3] ^ Sbox[roundKey[7][13]];//G func
+	roundKey[8][1] = roundKey[6][1] ^ Sbox[roundKey[7][14]];
+	roundKey[8][2] = roundKey[6][2] ^ Sbox[roundKey[7][15]];
+	roundKey[8][3] = roundKey[6][3] ^ Sbox[roundKey[7][12]];
+    // word 33~35
+	for (int i = 0; i < 12; i++)
+		roundKey[8][i + 4] = roundKey[8][i] ^ roundKey[6][i + 4];
+    // word 36
+    roundKey[9][0] = roundKey[7][0] ^ Sbox[roundKey[8][12]];
+    roundKey[9][1] = roundKey[7][1] ^ Sbox[roundKey[8][13]];
+    roundKey[9][2] = roundKey[7][2] ^ Sbox[roundKey[8][14]];
+    roundKey[9][3] = roundKey[7][3] ^ Sbox[roundKey[8][15]];
+    // word 37~39
+    for (int i = 0; i < 12; i++)
+		roundKey[9][i + 4] = roundKey[9][i] ^ roundKey[7][i + 4];
+    
+    // word 40
+    roundKey[10][0] = roundKey[8][0] ^ round_Constant[4] ^ Sbox[roundKey[9][13]];//G func
+	roundKey[10][1] = roundKey[8][1] ^ Sbox[roundKey[9][14]];
+	roundKey[10][2] = roundKey[8][2] ^ Sbox[roundKey[9][15]];
+	roundKey[10][3] = roundKey[8][3] ^ Sbox[roundKey[9][12]];
+    // word 41~43
+	for (int i = 0; i < 12; i++)
+		roundKey[10][i + 4] = roundKey[10][i] ^ roundKey[8][i + 4];
+    // word 44
+    roundKey[11][0] = roundKey[9][0] ^ Sbox[roundKey[10][12]];
+    roundKey[11][1] = roundKey[9][1] ^ Sbox[roundKey[10][13]];
+    roundKey[11][2] = roundKey[9][2] ^ Sbox[roundKey[10][14]];
+    roundKey[11][3] = roundKey[9][3] ^ Sbox[roundKey[10][15]];
+    // word 45~47
+    for (int i = 0; i < 12; i++)
+		roundKey[11][i + 4] = roundKey[11][i] ^ roundKey[9][i + 4];
+    
+    // word 48
+    roundKey[12][0] = roundKey[10][0] ^ round_Constant[5] ^ Sbox[roundKey[11][13]];//G func
+	roundKey[12][1] = roundKey[10][1] ^ Sbox[roundKey[11][14]];
+	roundKey[12][2] = roundKey[10][2] ^ Sbox[roundKey[11][15]];
+	roundKey[12][3] = roundKey[10][3] ^ Sbox[roundKey[11][12]];
+    // word 49~51
+	for (int i = 0; i < 12; i++)
+		roundKey[12][i + 4] = roundKey[12][i] ^ roundKey[10][i + 4];
+    // word 52
+    roundKey[13][0] = roundKey[11][0] ^ Sbox[roundKey[12][12]];
+    roundKey[13][1] = roundKey[11][1] ^ Sbox[roundKey[12][13]];
+    roundKey[13][2] = roundKey[11][2] ^ Sbox[roundKey[12][14]];
+    roundKey[13][3] = roundKey[11][3] ^ Sbox[roundKey[12][15]];
+    // word 53~55
+    for (int i = 0; i < 12; i++)
+		roundKey[13][i + 4] = roundKey[13][i] ^ roundKey[11][i + 4];
+    
+    // word 56
+    roundKey[14][0] = roundKey[12][0] ^ round_Constant[6] ^ Sbox[roundKey[13][13]];//G func
+	roundKey[14][1] = roundKey[12][1] ^ Sbox[roundKey[13][14]];
+	roundKey[14][2] = roundKey[12][2] ^ Sbox[roundKey[13][15]];
+	roundKey[14][3] = roundKey[12][3] ^ Sbox[roundKey[13][12]];
+    // word 57~59
+	for (int i = 0; i < 12; i++)
+		roundKey[14][i + 4] = roundKey[14][i] ^ roundKey[12][i + 4];
+}
+
+void AES256_Encrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[16])
+{
+	uint8_t state[16] = { 0, };
+    uint8_t roundKey[15][16] = { 0, };
+
+    // memcpy 사용 X
+	for (int j = 0; j < 16; j++) {
+        state[j] = plainText[j];
+    }
+    // Key expansion
+	AES256_KeySchedule_2(key, roundKey);
+
+	AES_AddRoundkey(state, roundKey[0]);
+
+	//----------------------------------------------------------------------------
+	for (int j = 1; j < 14; j++)// 1~13라운드
+	{
+        AES_SubBytes(state);
+		AES_ShiftRows(state);
+		AES_MixColumns(state);
+        AES_AddRoundkey(state, roundKey[j]);
+		
+	}
+
+	//14 라운드
+
+	AES_SubBytes(state);
+	AES_ShiftRows(state);
+    AES_AddRoundkey(state, roundKey[14]);
+
+    for (int j = 0; j < 16; j++) {
+        cipherText[j] = state[j];
+    }
+	
+}
+
+void AES256_Decrypt(uint8_t plainText[16] ,uint8_t cipherText[16], uint8_t key[16])
+{
+	uint8_t state[16] = { 0, };
+    uint8_t roundKey[15][16] = { 0, };
+
+	for (int j = 0; j < 16; j++) {
+        state[j] = cipherText[j];
+    }
+    
+    AES256_KeySchedule_2(key, roundKey);
+	AES_AddRoundkey(state, roundKey[14]);
+
+	//----------------------------------------------------------------------------
+	for (int j = 1; j < 14; j++)// 1~13라운드
+	{
+        AES_InvShiftRows(state);
+		AES_InvSubBytes(state);
+        AES_AddRoundkey(state, roundKey[14 - j]);
+        AES_InvMixColumns(state);
+	}
+
+	//13 라운드
+	AES_InvShiftRows(state);
+    AES_InvSubBytes(state);
+    AES_AddRoundkey(state, roundKey[0]);
+	
+    for (int j = 0; j < 16; j++) {
+        plainText[j] = state[j];
+    }
+}
