@@ -242,10 +242,10 @@ void SEED_Dec(uint32_t* Plaintext, uint32_t* Ciphertext, uint32_t* Key) {
     word state[4] = { 0, };
     Key_gen(Key, RK);
     
-    state[0] = Plaintext[0];
-    state[1] = Plaintext[1];
-    state[2] = Plaintext[2];
-    state[3] = Plaintext[3];
+    state[0] = Ciphertext[0];
+    state[1] = Ciphertext[1];
+    state[2] = Ciphertext[2];
+    state[3] = Ciphertext[3];
     word A = 0, B = 0, C = 0, D = 0;
     for (int i = 0; i < 15; i++) {
         C = state[2];
@@ -258,9 +258,9 @@ void SEED_Dec(uint32_t* Plaintext, uint32_t* Ciphertext, uint32_t* Key) {
         state[1] = D;
 
     }
-    Ciphertext[2] = state[2];
-    Ciphertext[3] = state[3];
+    Plaintext[2] = state[2];
+    Plaintext[3] = state[3];
     F_fun(state[2], state[3], RK[0][0], RK[0][1], &A, &B);
-    Ciphertext[0] = A ^ state[0];
-    Ciphertext[1] = B ^ state[1];
+    Plaintext[0] = A ^ state[0];
+    Plaintext[1] = B ^ state[1];
 }
