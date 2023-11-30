@@ -10,7 +10,7 @@ RAM: 7.6 GiB
 ## Status
 
 **Padding**
-- PKCS#7
+- PKCS#7 (Currently in stationary use)
 
 **Block Ciphers**
 - AES: AES-128, AES-192, AES-256
