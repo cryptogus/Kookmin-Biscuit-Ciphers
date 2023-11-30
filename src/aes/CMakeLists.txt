@@ -1,4 +1,4 @@
-set(AES128 "")
+set(AES "")
 
 # 목적파일 생성
 add_library(aes OBJECT aes.c)
