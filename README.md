@@ -53,6 +53,7 @@ On Ubuntu:
         ├── aes_test
         ├── pipo_test
         ├── lea_test
+        ├── seed_test
         └── padding_test
     ```
 
