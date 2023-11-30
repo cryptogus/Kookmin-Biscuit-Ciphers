@@ -29,6 +29,9 @@ void help()
     printf("\n");
     printf("lea128\tlea192\tlea256");
 
+    printf("\n");
+    printf("seed");
+
     printf("\n\n");
     printf("Modes of operation commands:\n");
     printf("ecb\tcbc\n");
@@ -105,6 +108,8 @@ int main(int argc, char *argv[]) {
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_ENC;
         }else if (strcmp(argv[2], "lea256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_ENC;
+        }else if (strcmp(argv[2], "seed") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Enc;
         }else{
             usage();
             return 3;
@@ -165,6 +170,8 @@ int main(int argc, char *argv[]) {
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_DEC;
         }else if (strcmp(argv[2], "lea256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_DEC;
+        }else if (strcmp(argv[2], "seed") == 0){
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Dec;
         }else{
             usage();
             return 3;

@@ -13,11 +13,11 @@ RAM: 7.6 GiB
 - PKCS#7
 
 **Block Ciphers**
-- AES: AES-128, AES-192, AES-256 https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
-- LEA: LEA-128, LEA-192, LEA-256
-- ARIA:
-- SEED:
+- AES: AES-128, AES-192, AES-256
 - PIPO: PIPO64/128, PIPO64/256
+- LEA: LEA-128, LEA-192, LEA-256
+- SEED: SEED128
+- ARIA:
 
 **Modes of Operation**
 - ECB

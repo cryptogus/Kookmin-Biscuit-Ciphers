@@ -41,6 +41,13 @@ void LEA192_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
 void LEA256_ENC(uint32_t ciphertext[], uint32_t plaintext[], uint32_t Key[]);
 void LEA256_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
 
+/**
+ * SEED, reference: https://seed.kisa.or.kr/kisa/algorithm/EgovSeedInfo.do
+*/
+
+void SEED_Enc(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
+void SEED_Dec(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
+
 unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *len);
 unsigned char *pkcs7_depadding(unsigned char *input, size_t *len);
 
