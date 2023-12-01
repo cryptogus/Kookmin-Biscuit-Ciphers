@@ -72,4 +72,9 @@ On Ubuntu:
 
 5. The `KBC` dynamic library is created at the `build/src` location. (Using with api.h)
 
+6. How to run applications after building in the main directory
+    ```bash
+    $ build/openKBC
+    ```
+
 
