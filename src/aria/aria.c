@@ -506,7 +506,7 @@ void ARIA128_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]) {
  *
  */
 
-#include <stdio.h>
+/*#include <stdio.h>
 #include <stdlib.h>
 
 typedef unsigned char Byte;
