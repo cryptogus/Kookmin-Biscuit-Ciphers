@@ -279,8 +279,27 @@ void rotation(unsigned char* W, unsigned char N, unsigned char m, unsigned char 
 		}
 		X[0] ^= Y[15];
 		
-	}
-	else if (N == 31 && m == '>') {
+	}else if (N == 19 && m == '<') {
+		/////////////// 19 rotation/////////////
+		
+		for (int i = 0; i < 14; i++) {
+			X[i] = W[i + 2];
+			Y[i] = X[i];
+		}
+		X[14] = W[0];
+		X[15] = W[1];
+		Y[14] = X[14];
+		Y[15] = X[15];
+		for (int i = 15; i >= 0; i--) {
+			X[i] <<= 3;
+			Y[i] >>= 5;
+		}
+		for (int i = 0; i < 15; i++) {
+			X[i] = X[i] ^ Y[i + 1];
+		}
+		X[15] ^= Y[0];
+		
+	}else if (N == 31 && m == '>') {
 		/////////////// 31 >>> rotation/////////////
 
 		for (int i = 15; i > 2; i--) {
@@ -720,19 +739,19 @@ void ARIA256_keyexpend(unsigned char *key, unsigned char(*ek)[16]) {
 	}
 	rotation(W0, 31, '<', X);
 	for (int i = 0; i < 16; i++) {
-		ek[14][i] = W3[i] ^ X[i];
+		ek[15][i] = W3[i] ^ X[i];
 	}
 	rotation(W1, 19, '<', X);
 	for (int i = 0; i < 16; i++) {
-		ek[14][i] = W0[i] ^ X[i];
+		ek[16][i] = W0[i] ^ X[i];
 	}
 }
 
-void ARIA192_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]) {
-	unsigned char ek[15][16];
-	ARIA192_keyexpend(key, ek);
+void ARIA256_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]) {
+	unsigned char ek[17][16] = {0, };
+	ARIA256_keyexpend(key, ek);
 	
-	unsigned char state[14][16] = { 0, };
+	unsigned char state[15][16] = { 0, };
 	F0(plaintext, ek[0], state[0]);
 	Fe(state[0], ek[1], state[1]);
 	F0(state[1], ek[2], state[2]);
@@ -746,41 +765,46 @@ void ARIA192_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]) {
 	F0(state[9], ek[10], state[10]);
 	Fe(state[10], ek[11], state[11]);
 	F0(state[11], ek[12], state[12]);
-	Ff(state[12], ek[13], ek[14], ciphertext);
+	Fe(state[12], ek[13], state[13]);
+	F0(state[13], ek[14], state[14]);
+	Ff(state[14], ek[15], ek[16], ciphertext);
 }
 /*
 복호화 라운드 키는 dk1 = ekn+1; dk2 = A(ekn); dk3 = A(ekn¡1); ... dkn = A(ek2); dkn+1 = ek1, A는 확장 행렬
 */
-void ARIA192_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]) {
-	unsigned char ek[15][16];
-	unsigned char ek2[14][16] = {0, };
-	ARIA192_keyexpend(key, ek);
+void ARIA256_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]) {
+	unsigned char ek[17][16];
+	unsigned char ek2[16][16] = {0, };
+	ARIA256_keyexpend(key, ek);
 	
 	unsigned char state[15][16] = { 0, };
 	// 확산 함수
-	for (int k = 13; k > 0; k--) {
+	for (int k = 15; k > 0; k--) {
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 16; j++) {
 				ek2[k][i] ^= A[i][j] * ek[k][j];
 			}
 		}
 	}
-	F0(ciphertext, ek[14], state[0]);
-
-	Fe(state[0], ek2[13], state[1]);
-	F0(state[1], ek2[12], state[2]);
-	Fe(state[2], ek2[11], state[3]);
-	F0(state[3], ek2[10], state[4]);
-	Fe(state[4], ek2[9], state[5]);
-	F0(state[5], ek2[8], state[6]);
-	Fe(state[6], ek2[7], state[7]);
-	F0(state[7], ek2[6], state[8]);
-	Fe(state[8], ek2[5], state[9]);
-	F0(state[9], ek2[4], state[10]);
-	Fe(state[10], ek2[3], state[11]);
-	F0(state[11], ek2[2], state[12]);
+	F0(ciphertext, ek[16], state[0]);
 	
-	Ff(state[12], ek2[1], ek[0], plaintext);
+	Fe(state[0], ek2[15], state[1]);
+	F0(state[1], ek2[14], state[2]);
+	Fe(state[2], ek2[13], state[3]);
+	F0(state[3], ek2[12], state[4]);
+	Fe(state[4], ek2[11], state[5]);
+	F0(state[5], ek2[10], state[6]);
+	Fe(state[6], ek2[9], state[7]);
+	F0(state[7], ek2[8], state[8]);
+	Fe(state[8], ek2[7], state[9]);
+	F0(state[9], ek2[6], state[10]);
+	Fe(state[10], ek2[5], state[11]);
+	F0(state[11], ek2[4], state[12]);
+	Fe(state[12], ek2[3], state[13]);
+	F0(state[13], ek2[2], state[14]);
+	
+
+	Ff(state[14], ek2[1], ek[0], plaintext);
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /*
