@@ -48,6 +48,16 @@ void LEA256_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
 void SEED_Enc(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
 void SEED_Dec(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
 
+/**
+ * ARIA, reference: https://seed.kisa.or.kr/kisa/Board/19/detailView.do
+*/
+
+void ARIA128_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]);
+void ARIA128_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]);
+
+/**
+ * padding
+*/
 unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *len);
 unsigned char *pkcs7_depadding(unsigned char *input, size_t *len);
 

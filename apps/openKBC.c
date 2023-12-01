@@ -30,6 +30,9 @@ void help()
     printf("lea128\tlea192\tlea256");
 
     printf("\n");
+    printf("aria128\t");
+
+    printf("\n");
     printf("seed");
 
     printf("\n\n");
@@ -108,6 +111,8 @@ int main(int argc, char *argv[]) {
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_ENC;
         }else if (strcmp(argv[2], "lea256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_ENC;
+        }else if (strcmp(argv[2], "aira128") == 0){
+            cipher = ARIA128_ENC;
         }else if (strcmp(argv[2], "seed") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Enc;
         }else{
@@ -170,6 +175,8 @@ int main(int argc, char *argv[]) {
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA192_DEC;
         }else if (strcmp(argv[2], "lea256") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))LEA256_DEC;
+        }else if (strcmp(argv[2], "aira128") == 0){
+            cipher = ARIA128_DEC;
         }else if (strcmp(argv[2], "seed") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Dec;
         }else{
