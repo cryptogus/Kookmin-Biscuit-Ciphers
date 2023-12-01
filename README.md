@@ -3,21 +3,21 @@ KBC is an C program for testing block cipher.
 
 Currently, it has been tested only on Linux.  
 
-**Environmental System Information**\
-CPU: quad core 11th Gen Intel Core i7-1165G7\
-Kernel: 5.15.133.1-microsoft-standard-WSL2 x86_64\
-RAM: 7.6 GiB
+### Environmental System Information
+**CPU: quad core 11th Gen Intel Core i7-1165G7**\
+**Kernel: 5.15.133.1-microsoft-standard-WSL2 x86_64**\
+**RAM: 7.6 GiB**
 ## Status
 
 **Padding**
 - PKCS#7 (Currently in stationary use)
 
 **Block Ciphers**
-- AES: AES-128, AES-192, AES-256
+- AES:  AES-128, AES-192, AES-256
 - PIPO: PIPO64/128, PIPO64/256
-- LEA: LEA-128, LEA-192, LEA-256
+- LEA:  LEA-128, LEA-192, LEA-256
 - SEED: SEED128
-- ARIA:
+- ARIA: ARIA-128, ARIA-192, ARIA-256
 
 **Modes of Operation**
 - ECB
@@ -51,6 +51,7 @@ On Ubuntu:
         ├── CBC_test
         ├── ECB_test
         ├── aes_test
+        ├── aria_test
         ├── pipo_test
         ├── lea_test
         ├── seed_test
