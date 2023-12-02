@@ -36,7 +36,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_5">
+       <widget class="QCheckBox" name="Decrypt">
         <property name="text">
          <string>Decrypt</string>
         </property>

@@ -32,6 +32,16 @@ void Widget::on_openKBC_clicked()
         return;
     }
 
+    if (ui->Encrypt_2->checkState() && !(ui->Decrypt->checkState())) {
+        goto enc;
+    }
+    if (!(ui->Encrypt_2->checkState()) && (ui->Decrypt->checkState())) {
+        goto dec;
+    }
+
+enc:;
+
+dec:;
 
 }
 

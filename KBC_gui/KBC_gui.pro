@@ -13,7 +13,12 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
-    widget.h
+    widget.h \
+    ../apps/api.h
+
+LIBS += \
+    #-L/../build/src
+    -L$$PWD -lKBC
 
 FORMS += \
     widget.ui
