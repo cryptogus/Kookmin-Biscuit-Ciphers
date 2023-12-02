@@ -25,7 +25,13 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - ECB
 - CBC
 ## Windows
-1. cmake downloads  
+1. git
+   https://git-scm.com/download/win
+   
+2. msvc compiler & nmake
+   https://visualstudio.microsoft.com/ko/downloads/  
+   
+3. cmake downloads  
     https://cmake.org/download/
 
     ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)
@@ -41,7 +47,7 @@ On Ubuntu:
     ```bash
     $ sudo apt update
     $ sudo apt upgrade
-    $ sudo apt install cmake gcc valgrind
+    $ sudo apt install git cmake gcc valgrind
     
     # Qt (for gui)
     $ sudo apt install qt5-qmake qtbase5-dev
