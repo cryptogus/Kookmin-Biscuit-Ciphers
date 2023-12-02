@@ -15,21 +15,23 @@ Widget::~Widget()
 
 void Widget::on_openKBC_clicked()
 {
-    text_ = ui->textEdit->toPlainText();
-    key_ = ui->key->toPlainText();
-    iv_ = ui->iv->toPlainText();
+    text_ = ui->textEdit_2->toPlainText().toStdString();
+    key_ = ui->key_2->toPlainText().toStdString();
+    iv_ = ui->iv_2->toPlainText().toStdString();
 
-    if (strcmp()) {
-        ui->textChat->append("이름을 입력해주세요.");
+    if (text_== "") {
+        ui->textBrowser_2->append("Input text.");
         return;
     }
-    ui->openKBC->//
+    if (key_== "") {
+        ui->textBrowser_2->append("Input key.");
+        return;
+    }
+    if (iv_ == "") {
+        ui->textBrowser_2->append("Input iv.");
+        return;
+    }
+
+
 }
-
-
-void Widget::on_dockWidget_allowedAreasChanged(const Qt::DockWidgetAreas &allowedAreas)
-{
-
-}
-
 

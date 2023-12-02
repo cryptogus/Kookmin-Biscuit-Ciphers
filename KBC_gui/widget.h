@@ -17,15 +17,11 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-    unsigned char *text_;
-    unsigned char *key_;
-    unsigned char *iv_;
+    std::string text_;
+    std::string key_;
+    std::string iv_;
 private slots:
     void on_openKBC_clicked();
-
-    void on_dockWidget_allowedAreasChanged(const Qt::DockWidgetAreas &allowedAreas);
-
-    void on_textEdit_copyAvailable(bool b);
 
 private:
     Ui::Widget *ui;

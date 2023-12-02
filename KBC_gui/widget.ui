@@ -6,54 +6,91 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>870</width>
+    <height>358</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Widget</string>
   </property>
-  <widget class="QDockWidget" name="dockWidget">
+  <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>40</x>
-     <y>30</y>
-     <width>451</width>
-     <height>201</height>
+     <x>30</x>
+     <y>10</y>
+     <width>802</width>
+     <height>233</height>
     </rect>
    </property>
-   <property name="maximumSize">
-    <size>
-     <width>524287</width>
-     <height>201</height>
-    </size>
+   <property name="title">
+    <string>openKBC</string>
    </property>
-   <widget class="QWidget" name="dockWidgetContents">
-    <widget class="QPushButton" name="openKBC">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>160</y>
-       <width>80</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>openKBC</string>
-     </property>
-    </widget>
-    <widget class="QWidget" name="">
-     <property name="geometry">
-      <rect>
-       <x>170</x>
-       <y>10</y>
-       <width>258</width>
-       <height>107</height>
-      </rect>
-     </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QTextEdit" name="textEdit">
+       <widget class="QCheckBox" name="Encrypt_2">
+        <property name="text">
+         <string>Encrypt</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_5">
+        <property name="text">
+         <string>Decrypt</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_5">
+      <item>
+       <widget class="QCheckBox" name="checkBox_6">
+        <property name="text">
+         <string>ECB</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="checkBox_7">
+        <property name="text">
+         <string>CBC</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Text</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Key</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Iv</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <widget class="QTextEdit" name="textEdit_2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -69,7 +106,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="key">
+       <widget class="QTextEdit" name="key_2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -85,7 +122,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QTextEdit" name="iv">
+       <widget class="QTextEdit" name="iv_2">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -101,8 +138,25 @@
        </widget>
       </item>
      </layout>
-    </widget>
-   </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="openKBC_2">
+      <property name="text">
+       <string>openKBC</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser_2">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>250</y>
+     <width>801</width>
+     <height>81</height>
+    </rect>
+   </property>
   </widget>
  </widget>
  <resources/>
