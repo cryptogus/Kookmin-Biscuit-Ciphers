@@ -1,7 +1,9 @@
-# Kookmin Block Cipher (KBC) Test용
+# Kookmin Block Cipher (KBC) for students
 KBC is an C program for testing block cipher.
 
-Currently, it has been tested only on Linux.  
+Currently, it has been tested only on Linux in 2023.11
+
+This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 
 ### Environmental System Information
 **CPU: quad core 11th Gen Intel Core i7-1165G7**\
@@ -34,7 +36,7 @@ On Ubuntu:
     $ sudo apt upgrade
     $ sudo apt install cmake gcc valgrind
     
-    # Qt (gui)
+    # Qt (for gui)
     $ sudo apt install qt5-qmake qtbase5-dev
     ```
 
