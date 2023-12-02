@@ -33,6 +33,9 @@ On Ubuntu:
     $ sudo apt update
     $ sudo apt upgrade
     $ sudo apt install cmake gcc valgrind
+    
+    # Qt (gui)
+    $ sudo apt install qt5-qmake qtbase5-dev
     ```
 
 2. Build
@@ -77,5 +80,14 @@ On Ubuntu:
     ```bash
     $ build/openKBC
     ```
+7. gui build (unfinished)
+    ```bash
+    $ cd KBC_gui
+    $ mkdir build
+    $ cd build
+    $ qmake ..
+    $ make -j$(nproc)
+    $ ./KBC_gui
+    ```
 
-
+![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7)
