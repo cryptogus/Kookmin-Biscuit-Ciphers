@@ -26,9 +26,9 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - CBC
 ## Windows
 1. cmake downloads  
-https://cmake.org/download/
+    https://cmake.org/download/
 
-![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)
 
 I chose Windows x64 Installer. Make sure to choose one that fits your environment.
 
@@ -99,4 +99,4 @@ On Ubuntu:
     $ ./KBC_gui
     ```
 
-![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7)
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7)
