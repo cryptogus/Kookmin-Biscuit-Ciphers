@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.10)
 #[[
 if(WIN32)
     # 윈도우 플랫폼일 때 실행할 명령어
-      set(CMAKE_C_COMPILER "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.38.33130/bin/Hostx64/x64/cl.exe")
+    # MSVC x64 컴파일러 위치
+    set(CMAKE_C_COMPILER "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.38.33130/bin/Hostx64/x64/cl.exe")
     message("This is Windows platform.")
     # 추가적인 명령어를 여기에 추가할 수 있습니다.
 endif()
