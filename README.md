@@ -25,10 +25,10 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - ECB
 - CBC
 ## Windows
-1. git
+1. git  
    https://git-scm.com/download/win
    
-2. msvc compiler & nmake
+2. msvc compiler & nmake  
    https://visualstudio.microsoft.com/ko/downloads/  
    
 3. cmake downloads  
@@ -38,6 +38,12 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 
 I chose Windows x64 Installer. Make sure to choose one that fits your environment.
 
+4. build
+   I used **x64 Native Tools Command Prompt for VS 2022** in the "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2022\Visual Studio Tools\VC" location.
+   ```shell
+   PS> cmake -B build -S . && cd build
+   PS> nmake
+   ```
 ## Linux
 
 On Ubuntu:
