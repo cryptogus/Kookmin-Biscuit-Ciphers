@@ -24,6 +24,13 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 **Modes of Operation**
 - ECB
 - CBC
+## Windows
+1. cmake downloads  
+https://cmake.org/download/
+
+![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)
+
+I chose Windows x64 Installer. Make sure to choose one that fits your environment.
 
 ## Linux
 
