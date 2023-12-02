@@ -36,7 +36,7 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 
     ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)
 
-I chose Windows x64 Installer. Make sure to choose one that fits your environment.
+   I chose Windows x64 Installer. Make sure to choose one that fits your environment.
 
 4. build  
    I used **x64 Native Tools Command Prompt for VS 2022** in the "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2022\Visual Studio Tools\VC" location.
