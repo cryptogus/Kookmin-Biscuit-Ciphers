@@ -19,3 +19,10 @@ set(crypto_OBJS ${crypto_OBJS} ${PADDING})
 add_library(KBC SHARED ${crypto_OBJS})
 # 컴파일 옵션 설정
 # target_compile_options(KMS PRIVATE -fPIC)
+
+# KBC_gui 디렉터리로 라이브러리 복사
+add_custom_command(TARGET KBC POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    $<TARGET_FILE:KBC>
+    ${CMAKE_CURRENT_LIST_DIR}/../KBC_gui/
+)
