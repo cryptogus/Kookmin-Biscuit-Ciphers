@@ -115,7 +115,7 @@ On Ubuntu:
 
     If you build using qtcreator, you should pay attention to the location of the KBC library and api.h file in the **.pro** (qmake file) because the location of the build directory is $PWD.
 
-    setting build directory
-    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/846e10b7-abfa-43b6-887e-cef07fe74369)
-    qmake
-    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/eaf4f252-0129-4e84-9b9a-876f4e8c2115)
+    ### setting build directory
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/846e10b7-abfa-43b6-887e-cef07fe74369)  
+    ### setting .pro (qmake file)  
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/eaf4f252-0129-4e84-9b9a-876f4e8c2115)  
