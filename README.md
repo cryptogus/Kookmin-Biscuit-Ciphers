@@ -110,4 +110,12 @@ On Ubuntu:
     $ ./KBC_gui
     ```
 
-    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7)
+    <!-- ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7) -->
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/270e46c1-a1f0-4883-8276-0abf07235dd7)
+
+    If you build using qtcreator, you should pay attention to the location of the KBC library and api.h file in the .proqmake file because the location of the build directory is $PWD.
+
+    setting build directory
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/846e10b7-abfa-43b6-887e-cef07fe74369)
+    qmake
+    ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/eaf4f252-0129-4e84-9b9a-876f4e8c2115)
