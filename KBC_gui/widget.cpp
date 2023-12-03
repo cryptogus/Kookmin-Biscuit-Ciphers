@@ -1,5 +1,12 @@
 #include "widget.h"
 #include "ui_widget.h"
+#include "../apps/api.h"
+
+void hexStringToBytes(const char* hexString, unsigned char* bytes, size_t length) {
+    for (size_t i = 0; i < length; i++) {
+        sscanf(hexString + 2 * i, "%2hhx", &bytes[i]);
+    }
+}
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
@@ -32,16 +39,25 @@ void Widget::on_openKBC_clicked()
         return;
     }
 
+    void (*cipher)(uint8_t *, uint8_t *, uint8_t *) = 0;
+
     if (ui->Encrypt_2->checkState() && !(ui->Decrypt->checkState())) {
-        goto enc;
-    }
-    if (!(ui->Encrypt_2->checkState()) && (ui->Decrypt->checkState())) {
-        goto dec;
-    }
+        if (ui->AES128->checkState()) {
+            cipher = AES128_Encrypt;
+        }else if (ui->AES192->checkState()) {
+            cipher = AES192_Encrypt;
+        }else if (ui->PIPO128->checkState()) {
+            cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))PIPO128_ENC;
+        }
+    } else if (!(ui->Encrypt_2->checkState()) && (ui->Decrypt->checkState())) {
 
-enc:;
-
-dec:;
+        if (ui->AES128->checkState()) {
+            cipher = AES128_Decrypt;
+        }else if (ui->AES192->checkState()) {
+            cipher = AES192_Decrypt;
+        }
+    }
+    cipher;
 
 }
 

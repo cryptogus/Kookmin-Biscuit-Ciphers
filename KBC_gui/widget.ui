@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>870</width>
-    <height>358</height>
+    <width>1276</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,10 +16,10 @@
   <widget class="QGroupBox" name="groupBox">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>10</y>
-     <width>802</width>
-     <height>233</height>
+     <x>100</x>
+     <y>60</y>
+     <width>1071</width>
+     <height>371</height>
     </rect>
    </property>
    <property name="title">
@@ -45,16 +45,104 @@
      </layout>
     </item>
     <item>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="AES128">
+        <property name="text">
+         <string>AES128</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QCheckBox" name="AES192">
+        <property name="text">
+         <string>AES192</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QCheckBox" name="AES256">
+        <property name="text">
+         <string>AES256</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="PIPO128">
+        <property name="text">
+         <string>PIPO128</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QCheckBox" name="SEED">
+        <property name="text">
+         <string>SEED</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QCheckBox" name="LEA128">
+        <property name="text">
+         <string>LEA128</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QCheckBox" name="LEA192">
+        <property name="text">
+         <string>LEA192</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QCheckBox" name="LEA256">
+        <property name="text">
+         <string>LEA256</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QCheckBox" name="ARIA128">
+        <property name="text">
+         <string>ARIA128</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QCheckBox" name="ARIA192">
+        <property name="text">
+         <string>ARIA192</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QCheckBox" name="ARIA256">
+        <property name="text">
+         <string>ARIA256</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QCheckBox" name="PIPO128_2">
+        <property name="text">
+         <string>PIPO256</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item>
      <layout class="QVBoxLayout" name="verticalLayout_5">
       <item>
-       <widget class="QCheckBox" name="checkBox_6">
+       <widget class="QCheckBox" name="ECB">
         <property name="text">
          <string>ECB</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QCheckBox" name="checkBox_7">
+       <widget class="QCheckBox" name="CBC">
         <property name="text">
          <string>CBC</string>
         </property>
@@ -140,7 +228,7 @@
      </layout>
     </item>
     <item>
-     <widget class="QPushButton" name="openKBC_2">
+     <widget class="QPushButton" name="openKBC">
       <property name="text">
        <string>openKBC</string>
       </property>
@@ -151,8 +239,8 @@
   <widget class="QTextBrowser" name="textBrowser_2">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>250</y>
+     <x>210</x>
+     <y>470</y>
      <width>801</width>
      <height>81</height>
     </rect>
