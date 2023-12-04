@@ -37,8 +37,9 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
     <!--![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/32ba3154-f3ea-4250-aef7-a955ad36e43c)-->
    I chose Windows x64 Installer. Make sure to choose one that fits your environment.
 
-4. build  
-   I used **x64 Native Tools Command Prompt for VS 2022** in the "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2022\Visual Studio Tools\VC" location.
+4. build
+   first: I ran "C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"  
+   second: I used **x64 Native Tools Command Prompt for VS 2022** in the "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2022\Visual Studio Tools\VC" location.
    ```shell
    PS> cmake -B build -S . && cd build
    PS> nmake
