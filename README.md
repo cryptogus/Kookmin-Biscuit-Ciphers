@@ -61,8 +61,10 @@ On Ubuntu:
     ```
 
 2. Build
+    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSL=OFF.
     ```bash
-    $ cmake -B build -S . && cd build
+    $ cmake -B build -S .&& cd build
+    # $ cmake -B build -S . -DUSE_OPENSSL=OFF && cd build
     $ make -j$(nproc)
     ```
     ```bash
