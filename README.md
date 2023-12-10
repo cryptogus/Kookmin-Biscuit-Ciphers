@@ -55,7 +55,7 @@ On Ubuntu:
     ```bash
     $ sudo apt update
     $ sudo apt upgrade
-    $ sudo apt install git cmake gcc valgrind
+    $ sudo apt install git cmake gcc build-essential libssl-dev valgrind
     
     # Qt (for gui)
     $ sudo apt install qt5-qmake qtbase5-dev
