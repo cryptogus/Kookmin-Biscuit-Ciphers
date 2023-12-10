@@ -20,6 +20,7 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - LEA:  LEA-128, LEA-192, LEA-256
 - SEED: SEED128
 - ARIA: ARIA-128, ARIA-192, ARIA-256
+- RSA: RSA2048
 
 **Modes of Operation**
 - ECB
@@ -60,8 +61,9 @@ On Ubuntu:
     $ sudo apt install qt5-qmake qtbase5-dev
     ```
 
-2. Build
-    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSL=OFF.
+2. Build  
+    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSL=OFF.  
+    OpenSSL is used only on rsa2048.
     ```bash
     $ cmake -B build -S .&& cd build
     # $ cmake -B build -S . -DUSE_OPENSSL=OFF && cd build
