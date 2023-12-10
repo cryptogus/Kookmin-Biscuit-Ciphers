@@ -20,6 +20,7 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - LEA:  LEA-128, LEA-192, LEA-256
 - SEED: SEED128
 - ARIA: ARIA-128, ARIA-192, ARIA-256
+**Public-key cryptography(asymmetric cryptography)**
 - RSA: RSA2048
 
 **Modes of Operation**
@@ -84,6 +85,7 @@ On Ubuntu:
         ├── pipo_test
         ├── lea_test
         ├── seed_test
+        ├── rsa2048_test
         └── padding_test
     ```
 
