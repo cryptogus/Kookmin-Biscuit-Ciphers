@@ -19,7 +19,8 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - PIPO: PIPO64/128, PIPO64/256
 - LEA:  LEA-128, LEA-192, LEA-256
 - SEED: SEED128
-- ARIA: ARIA-128, ARIA-192, ARIA-256  
+- ARIA: ARIA-128, ARIA-192, ARIA-256
+
 **Public-key cryptography(asymmetric cryptography)**
 - RSA: RSA2048
 
