@@ -64,7 +64,7 @@ On Ubuntu:
     ```
 
 2. Build  
-    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSL=OFF.  
+    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSSL=OFF.  
     OpenSSL is used only on rsa2048.
     ```bash
     $ cmake -B build -S .&& cd build
