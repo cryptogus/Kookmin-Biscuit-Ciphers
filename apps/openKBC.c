@@ -8,7 +8,8 @@ void usage()
 {
     printf("Usage: openKBC [options] <cipher> <mode> <plaintext or ciphertext> <key> <iv>...\n");
     printf("Sample1: openKBC -e aes128 ecb \"With great power comes great responsibility\" spiderman0000000 0\n");
-    printf("Sample2: openKBC -e aes128 cbc \"With great power comes great responsibility\" spiderman0000000 01234567890123456\n\n");
+    printf("Sample2: openKBC -e aes128 cbc \"With great power comes great responsibility\" spiderman0000000 01234567890123456\n");
+    printf("Sample3: openKBC rsa2048 \"OpenSSL RSA Enc Dec Test\"\n\n");
     printf("-h is help option\n");
 }
 
@@ -37,7 +38,11 @@ void help()
 
     printf("\n\n");
     printf("Modes of operation commands:\n");
-    printf("ecb\tcbc\n");
+    printf("ecb\tcbc");
+
+    printf("\n\n");
+    printf("Public-key cryptography:\n");
+    printf("rsa2048\n");
 
 }
 
@@ -72,7 +77,7 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
-    if (argc < 6) {
+    if (argc < 6 && strcmp(argv[1], "rsa2048")) {
         usage();
         return 1;
     }
@@ -83,6 +88,50 @@ int main(int argc, char *argv[]) {
     }else if (strcmp(argv[1], "-d") == 0) {
         goto dec;
 
+    }else if (strcmp(argv[1], "rsa2048") == 0) {
+        RSA *private_key = NULL;
+        RSA *public_key = NULL;
+
+        if (!generate_key_pair(&private_key, &public_key)) {
+            fprintf(stderr, "Failed to generate RSA key pair.\n");
+            return 1;
+        }
+        printf("================ Key pair ================\n");
+        print_public_key(public_key);
+        print_private_key(private_key);
+        
+        size_t text_length = strlen(argv[2]);
+
+        unsigned char cipher_text[KEY_LENGTH / 8];
+        char decrypted_text[KEY_LENGTH / 8];
+
+        // 암호화
+        int encrypted_length = rsa_encrypt(argv[2], text_length, public_key, cipher_text);
+        if (encrypted_length == -1) {
+            fprintf(stderr, "Encryption failed.\n");
+            return 1;
+        }
+
+        // 복호화
+        int decrypted_length = rsa_decrypt(cipher_text, encrypted_length, private_key, decrypted_text);
+        if (decrypted_length == -1) {
+            fprintf(stderr, "Decryption failed.\n");
+            return 1;
+        }
+
+        printf("Original Text: %s\n\n", argv[2]);
+        printf("Encrypted Text: ");
+        for (int i = 0; i < encrypted_length; ++i) {
+            printf("%02x", cipher_text[i]);
+        }
+        printf("\n\n");
+        printf("Decrypted Text: %s\n", decrypted_text);
+
+        // 메모리 해제
+        RSA_free(private_key);
+        RSA_free(public_key);
+
+        return 2;
     }else{
         usage();
         return 2;
