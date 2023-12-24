@@ -20,6 +20,10 @@ SOURCES += \
     #../src/aria/aria.c \
     #../src/seed/seed.c
 
+LIBS += \
+    -L$$PWD -lKBC \
+    -lcrypto
+
 HEADERS += \
     widget.h \
     qt_api.h
@@ -33,8 +37,4 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-LIBS += \
-    -L$$PWD -lKBC \
-    -lcrypto
     
