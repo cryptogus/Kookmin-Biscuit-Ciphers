@@ -122,9 +122,58 @@ On Ubuntu:
     <!-- ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/f247afd6-a1d5-4144-95c9-ad59ec7503d7) -->
     ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/270e46c1-a1f0-4883-8276-0abf07235dd7)
 
-    If you build using qtcreator, you should pay attention to the location of the KBC library and api.h file in the **.pro** (qmake file) because the location of the build directory is $PWD.
+    If you build using qtcreator, you should pay attention to the location of the KBC library and qt_api.h file in the **.pro** (qmake file) because the location of the build directory is $PWD.
 
     ### setting build directory
     ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/846e10b7-abfa-43b6-887e-cef07fe74369)  
     ### setting .pro (qmake file)  
     ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/eaf4f252-0129-4e84-9b9a-876f4e8c2115)  
+
+---
+
+## GUI TROUBLESHOOTING
+
+### 라이브러리 링크 문제:
+
+g++로 컴파일할 때는 C++ 런타임 라이브러리가 필요할 수 있습니다. 필요한 경우 -lstdc++ 플래그를 사용하여 링크해보세요.
+
+**C++ 코드에서 C 라이브러리를 사용하는 경우, extern "C" 블록으로 감싸진 헤더 파일을 사용하는 것이 중요합니다. 이것은 C++ 이름 맹글링과 관련된 문제를 해결할 수 있습니다. qt_api.h에 적용 중, 왜냐하면 libKBC.so 가 gcc 로 빌드, 즉 c언어로 구성된 라이브러리임.**   
+
+`KBC_gui/qt_api.h` 와 `apps/api.h`를 비교해보셈
+```cpp
+// 예: mylibrary.h
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// 라이브러리 관련 코드...
+
+#ifdef __cplusplus
+}
+#endif
+```
+
+
+### 실행 파일의 rpath 설정 확인:
+
+실행 파일이 ../build/src 디렉터리의 libKBC.so를 찾을 수 있도록 빌드 시에 rpath를 설정했는지 확인해야함.
+
+`libKBC.so`을 가지고 새로운 실행 파일을 만들고 싶을 수 있으니 아래는 그 예시다. openKBC.c 대신 다른 커스텀 하고 싶은 소스코드를 넣어도 된다.
+```bash
+$ gcc openKBC.c -o your_executable -L../build/src -Wl,-rpath=../build/src -lKBC -lcrypto
+```
+여기서 -Wl,-rpath=../build/src 옵션은 실행 파일이 ../build/src 디렉토리를 동적 라이브러리 검색 경로로 추가하도록 한다.
+
+아래 명령어로 라이브러리 경로를 잘 찾는지 확인한다.
+```bash
+$ ldd your_executable
+
+linux-vdso.so.1 (0x00007ffdcdd5b000)
+libKBC.so => ../build/src/libKBC.so (0x00007ff2612de000)
+libcrypto.so.3 => /lib/x86_64-linux-gnu/libcrypto.so.3 (0x00007ff260e93000)
+libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff260c6b000)
+/lib64/ld-linux-x86-64.so.2 (0x00007ff2612fd000)
+```
+`libKBC.so => ../build/src/libKBC.so` 로 아주 잘 찾는 것을 확인할 수 있다.  
+`KBC_gui/KBC_gui.pro` (qmake 파일)에 옵션 적용 중.
+
