@@ -85,9 +85,8 @@ void Widget::on_openKBC_clicked()
         }else {
             ui->textBrowser_2->append("Check Modes of Operation.");
         }
-        // ui->textBrowser_2->append("==================== ciphertext ====================");
-        QString output = QString("ciphertext: %s").arg((const char*)cipherText);
-        // ui->textBrowser_2->append(str.data());
+        QString output = QString("ciphertext: %1").arg(QString::fromUtf8((const char*)cipherText).toLatin1().toHex().constData());
+        // hex 값 출력
         ui->textBrowser_2->append(output);
 
         free(pad_plainText);
