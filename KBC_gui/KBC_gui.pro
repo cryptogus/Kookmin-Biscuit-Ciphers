@@ -10,20 +10,31 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    widget.cpp
+    widget.cpp \
+    #../src/aes/aes.c \
+    #../src/lea/lea.c \
+    #../src/mode/ECB.c \
+    #../src/mode/CBC.c \
+    #../src/padding/pkcs7.c \
+    #../src/pipo/pipo.c \
+    #../src/aria/aria.c \
+    #../src/seed/seed.c
 
 HEADERS += \
     widget.h \
-    ../apps/api.h
-
-LIBS += \
-    #-L/../build/src
-    -L$$PWD -lKBC
+    qt_api.h
 
 FORMS += \
     widget.ui
 
+
+# DESTDIR=./
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+LIBS += \
+    -L$$PWD -lKBC \
+    -lcrypto
+    
