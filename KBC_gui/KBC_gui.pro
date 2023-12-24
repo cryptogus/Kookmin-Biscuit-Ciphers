@@ -23,7 +23,7 @@ SOURCES += \
 LIBS += \
     -L$$PWD -lKBC \
     -lcrypto
-
+    
 HEADERS += \
     widget.h \
     qt_api.h
@@ -31,6 +31,8 @@ HEADERS += \
 FORMS += \
     widget.ui
 
+# QMAKE_LFLAGS에 -Wl,-rpath 옵션 추가, libKBC.so 위치 실행파일에 알려주는 옵션
+QMAKE_LFLAGS += -Wl,-rpath=../
 
 # DESTDIR=./
 # Default rules for deployment.
