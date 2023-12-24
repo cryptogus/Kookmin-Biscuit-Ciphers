@@ -7,4 +7,5 @@ cd ../KBC_gui
 mkdir build
 cd build
 qmake ..
-make -j$(nproc)``
+make -j$(nproc)
+# export LD_LIBRARY_PATH=../:$LD_LIBRARY_PATH
