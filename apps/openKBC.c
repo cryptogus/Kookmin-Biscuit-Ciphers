@@ -176,7 +176,7 @@ int main(int argc, char *argv[]) {
         // pkcs7 padding
         size_t len = 0;
         unsigned char *pad_plainText = pkcs7_padding((unsigned char *)argv[4], BLOCK_SIZE, &len);
-        unsigned char *cipherText = calloc(sizeof(unsigned char), len);
+        unsigned char *cipherText = (unsigned char *)calloc(sizeof(unsigned char), len);
         
         if (strcmp(argv[3], "ecb") == 0){
             // argv[5]에 16자리 문자열을 입력하면 실제 메모리에는 '\0' 포함 17-byte를 사용하지만 ECB 함수에서는 새로운 변수에 키 길이만큼(strlen 사용)만 사용하기에 그대로 인자로 넘겨주기에 문제 없음
@@ -205,7 +205,7 @@ int main(int argc, char *argv[]) {
         size_t hexStringLength = strlen(argv[4]);
         size_t byteLength = hexStringLength / 2;
         unsigned char *cipherText2 = (unsigned char*)malloc(byteLength);
-        unsigned char *decPlainText = calloc(sizeof(unsigned char), byteLength);
+        unsigned char *decPlainText = (unsigned char *)calloc(sizeof(unsigned char), byteLength);
 
         // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환
         hexStringToBytes(argv[4], cipherText2, byteLength);
