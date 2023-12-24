@@ -1,6 +1,28 @@
 #ifndef QTAPI_H
 #define QTAPI_H
 
+/*
+라이브러리 링크 문제:
+
+g++로 컴파일할 때는 C++ 런타임 라이브러리가 필요할 수 있습니다. 필요한 경우 -lstdc++ 플래그를 사용하여 링크해보세요.
+C++ 코드에서 C 라이브러리를 사용하는 경우, extern "C" 블록으로 감싸진 헤더 파일을 사용하는 것이 중요합니다. 이것은 C++ 이름 맹글링과 관련된 문제를 해결할 수 있습니다.
+
+// 예: mylibrary.h
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// 라이브러리 관련 코드...
+
+#ifdef __cplusplus
+}
+#endif
+
+*/
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdint.h>
 
 size_t BLOCK_SIZE = 16;
@@ -72,4 +94,7 @@ void ECB(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *key, size_t 
 
 void CBC_enc(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
 void CBC_dec(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
+#ifdef __cplusplus
+}
+#endif
 #endif
