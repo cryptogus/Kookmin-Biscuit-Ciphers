@@ -109,7 +109,7 @@ On Ubuntu:
     ```bash
     $ build/openKBC
     ```
-7. gui build (unfinished)
+7. gui build (unfinished) - 현재 Decrypt 기능에서 평문 출력이 안 되는 등의 기타 버그 존재, widget.cpp을 수정해야함, Qt에 대한 지식 필요
     ```bash
     $ cd KBC_gui
     $ mkdir build
