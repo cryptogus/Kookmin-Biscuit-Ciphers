@@ -3,6 +3,7 @@
 #include "qt_api.h"
 #include <cstdlib>
 #include <string>
+#include <QDebug>
 
 void hexStringToBytes(const char* hexString, unsigned char* bytes, size_t length) {
     for (size_t i = 0; i < length; i++) {
@@ -130,7 +131,7 @@ void Widget::on_openKBC_clicked()
 
         // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환
         hexStringToBytes(text_.c_str(), cipherText2, byteLength);
-        
+
         if (ui->ECB->checkState() && !(ui->CBC->checkState())) {
             ECB(cipher, (unsigned char *)key_.c_str(), BLOCK_SIZE, byteLength, cipherText2, decPlainText);
         }else if (ui->CBC->checkState() && !(ui->ECB->checkState())){
@@ -138,9 +139,16 @@ void Widget::on_openKBC_clicked()
         }else {
             ui->textBrowser_2->append("Check Modes of Operation.");
         }
+        
         unsigned char *decPlainText2 = pkcs7_depadding(decPlainText, &byteLength);
         
-        QString output2 = QString("plaintext: %1").arg(QString::fromUtf8((const char *)decPlainText2).toLatin1().toHex().constData());
+        // QDebug 헤더를 이용한 값의 출력 확인
+        //qDebug() << "decPlainText2: " << decPlainText2;
+        // decPlainText는 QString::fromUtf8로 하니 영문이 깨져서 출력 됨. decPlainText2는 출력 자체가 안됨
+        QString output2 = QString("plaintext: %1").arg(QString::fromUtf8((const char *)decPlainText2));
+        //qDebug() << "output2: " << output2;
+        
+
         // 값 출력
         ui->textBrowser_2->append(output2);
 
