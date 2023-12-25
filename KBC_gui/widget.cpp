@@ -122,7 +122,31 @@ void Widget::on_openKBC_clicked()
         }else{
             ui->textBrowser_2->append("Check Block Cipher.");
         }
+        // 2바이트씩 분할한 결과를 저장할 배열
+        size_t hexStringLength = strlen(text_.c_str());
+        size_t byteLength = hexStringLength / 2;
+        unsigned char *cipherText2 = (unsigned char*)malloc(byteLength);
+        unsigned char *decPlainText = (unsigned char *)calloc(sizeof(unsigned char), byteLength);
 
+        // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환
+        hexStringToBytes(text_.c_str(), cipherText2, byteLength);
+        
+        if (ui->ECB->checkState() && !(ui->CBC->checkState())) {
+            ECB(cipher, (unsigned char *)key_.c_str(), BLOCK_SIZE, byteLength, cipherText2, decPlainText);
+        }else if (ui->CBC->checkState() && !(ui->ECB->checkState())){
+            CBC_dec(cipher, (unsigned char *)iv_.c_str(), (unsigned char *)key_.c_str(), BLOCK_SIZE, byteLength, cipherText2, decPlainText);
+        }else {
+            ui->textBrowser_2->append("Check Modes of Operation.");
+        }
+        unsigned char *decPlainText2 = pkcs7_depadding(decPlainText, &byteLength);
+        
+        QString output2 = QString("plaintext: %1").arg(QString::fromUtf8((const char *)decPlainText2).toLatin1().toHex().constData());
+        // 값 출력
+        ui->textBrowser_2->append(output2);
+
+        free(cipherText2);
+        free(decPlainText);
+        free(decPlainText2);
     } else {
         ui->textBrowser_2->append("Check Encrypt or Decrypt (Please choose one of the two).");
     }
