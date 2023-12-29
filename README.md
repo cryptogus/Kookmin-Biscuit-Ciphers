@@ -177,5 +177,5 @@ libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007ff260c6b000)
 `libKBC.so => ../build/src/libKBC.so` 로 아주 잘 찾는 것을 확인할 수 있다.  
 `KBC_gui/KBC_gui.pro` (qmake 파일)에 옵션 적용 중.  
 
-### 나의 Qt 스승  
-https://gitlab.com/gilgil/gr
+<!-- ### 나의 Qt 스승  
+https://gitlab.com/gilgil/gr -->
