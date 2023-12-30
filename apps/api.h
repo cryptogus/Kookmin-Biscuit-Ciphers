@@ -2,6 +2,10 @@
 
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 size_t BLOCK_SIZE = 16;
 
 /***
@@ -85,3 +89,7 @@ int rsa_decrypt(const unsigned char *cipher_text, size_t cipher_length, RSA *pri
 void print_private_key(RSA *private_key);
 void print_public_key(RSA *public_key);
 int encrypt_message(const char *message, RSA *public_key, unsigned char **encrypted_message, size_t *encrypted_len);
+
+#ifdef __cplusplus
+}
+#endif
