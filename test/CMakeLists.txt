@@ -1,4 +1,4 @@
-include_directories(../src/aes/ ../src/pipo/ ../src/lea ../src/seed ../src/aria ../src/rsa ../src/padding ../src/mode)
+include_directories(../src/aes/ ../src/pipo/ ../src/lea ../src/seed ../src/aria ../src/chacha20 ../src/rsa ../src/padding ../src/mode)
 
 add_executable(AES-KEY-EXPANSION-TEST AES-keyexpansion-test.c)
 
@@ -7,6 +7,7 @@ add_executable(pipo_test ../src/pipo/pipo.c PIPO-test.c)
 add_executable(lea_test ../src/lea/lea.c LEA-test.c)
 add_executable(seed_test ../src/seed/seed.c SEED-test.c)
 add_executable(aria_test ../src/aria/aria.c ARIA-test.c)
+add_executable(chacha_quarter_round_test ../src/chacha20/chacha20.c ChaCha-Quarter-Round-test.c)
 option(USE_OPENSSL "Use OpenSSL for encryption" ON)
 if(USE_OPENSSL)
     find_package(OpenSSL REQUIRED)
