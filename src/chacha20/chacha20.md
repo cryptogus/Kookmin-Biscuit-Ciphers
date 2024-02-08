@@ -146,10 +146,10 @@ why some rounds are called "column rounds" while others are called "diagonal rou
     c += d;  b ^= c;  ROT_L32(b,  7)
 
 for (int i = 0; i < 10; i++) { // 20 rounds, 2 rounds per loop.
-    QUARTERROUND(block[0], block[4], block[ 8], block[12]); // column 0
-    QUARTERROUND(block[1], block[5], block[ 9], block[13]); // column 1
-    QUARTERROUND(block[2], block[6], block[10], block[14]); // column 2
-    QUARTERROUND(block[3], block[7], block[11], block[15]); // column 3
+    QUARTERROUND(block[0], block[4], block[ 8], block[12]); // column 1
+    QUARTERROUND(block[1], block[5], block[ 9], block[13]); // column 2
+    QUARTERROUND(block[2], block[6], block[10], block[14]); // column 3
+    QUARTERROUND(block[3], block[7], block[11], block[15]); // column 4
     QUARTERROUND(block[0], block[5], block[10], block[15]); // diagonal 1
     QUARTERROUND(block[1], block[6], block[11], block[12]); // diagonal 2
     QUARTERROUND(block[2], block[7], block[ 8], block[13]); // diagonal 3
