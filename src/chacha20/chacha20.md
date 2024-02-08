@@ -10,7 +10,7 @@ ChaCha20은 4x4 행렬을 사용하는 블록 암호 알고리즘이다.(정확�
 
 ### overview
 ```
-First := input: [constants | key | counter | nonce] → ChaCha20 → output: [key_stream]
+First := input: [constants | key | counter | nonce] → ChaCha20 Block Function → output: [key_stream]
 Second := [key_stream] XOR [plaintext] = [ciphertext]
 
 First is ChaCha20 Block
@@ -183,6 +183,32 @@ why some rounds are called "column rounds" while others are called "diagonal rou
    6.  QUARTERROUND ( 1, 6,11,12)
    7.  QUARTERROUND ( 2, 7, 8,13)
    8.  QUARTERROUND ( 3, 4, 9,14)
+```
+
+요기서 끝이 아니라 rfc7539에서의 ChaCha20 Block Function in Pseudocode까지 봐야 [overview]에서 봤던 First 과정이 된다. 
+
+```
+inner_block (state):
+         Qround(state, 0, 4, 8,12)
+         Qround(state, 1, 5, 9,13)
+         Qround(state, 2, 6,10,14)
+         Qround(state, 3, 7,11,15)
+         Qround(state, 0, 5,10,15)
+         Qround(state, 1, 6,11,12)
+         Qround(state, 2, 7, 8,13)
+         Qround(state, 3, 4, 9,14)
+         end
+
+      chacha20_block(key, counter, nonce):
+         state = constants | key | counter | nonce
+         working_state = state
+         for i=1 upto 10
+            inner_block(working_state)
+            end
+         state += working_state
+         return serialize(state)
+         end
+
 ```
 **Reference**
 
