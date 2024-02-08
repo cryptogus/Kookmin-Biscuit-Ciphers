@@ -28,14 +28,14 @@ void ChaCha_Quarter_Round(uint32_t *a, uint32_t *b, uint32_t *c, uint32_t *d) {
 
 static inline void chacha20_inner_block(uint32_t *state) {
     for (int i = 0; i < 10; i++) { // 20 rounds, 2 rounds per loop.
-        ChaCha_Quarter_Round(state[0], state[4], state[ 8], state[12]); // column 0
-        ChaCha_Quarter_Round(state[1], state[5], state[ 9], state[13]); // column 1
-        ChaCha_Quarter_Round(state[2], state[6], state[10], state[14]); // column 2
-        ChaCha_Quarter_Round(state[3], state[7], state[11], state[15]); // column 3
-        ChaCha_Quarter_Round(state[0], state[5], state[10], state[15]); // diagonal 1
-        ChaCha_Quarter_Round(state[1], state[6], state[11], state[12]); // diagonal 2
-        ChaCha_Quarter_Round(state[2], state[7], state[ 8], state[13]); // diagonal 3
-        ChaCha_Quarter_Round(state[3], state[4], state[ 9], state[14]); // diagonal 4
+        ChaCha_Quarter_Round(&state[0], &state[4], &state[ 8], &state[12]); // column 0
+        ChaCha_Quarter_Round(&state[1], &state[5], &state[ 9], &state[13]); // column 1
+        ChaCha_Quarter_Round(&state[2], &state[6], &state[10], &state[14]); // column 2
+        ChaCha_Quarter_Round(&state[3], &state[7], &state[11], &state[15]); // column 3
+        ChaCha_Quarter_Round(&state[0], &state[5], &state[10], &state[15]); // diagonal 1
+        ChaCha_Quarter_Round(&state[1], &state[6], &state[11], &state[12]); // diagonal 2
+        ChaCha_Quarter_Round(&state[2], &state[7], &state[ 8], &state[13]); // diagonal 3
+        ChaCha_Quarter_Round(&state[3], &state[4], &state[ 9], &state[14]); // diagonal 4
     }
 }
 
