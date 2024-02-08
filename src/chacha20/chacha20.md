@@ -8,6 +8,14 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 ChaCha20은 4x4 행렬을 사용하는 블록 암호 알고리즘이다.(정확히는 strean cipher) 각 행렬 요소는 32비트의 정수다.(512-bit blocks이고, 세세하게는 32-bit constant 4개, 256-bit key, 32-bit block counter, 96-bit nonce로 구성 되어있다.) 행렬은 16진수로 표현하였다.
 
+### overview
+```
+First := input: [constants | key | counter | nonce] → ChaCha20 → output: [key_stream]
+Second := [key_stream] XOR [plaintext] = [ciphertext]
+
+First is ChaCha20 Block
+Second is ChaCha20 Encryption
+```
 참고로 20라운드라서 ChaCha20이다. 
 
 ```
