@@ -6,8 +6,9 @@ This work is licensed under a [Creative Commons Attribution 4.0 International Li
 
 # ChaCha20
 
-ChaCha20은 4x4 행렬을 사용하는 블록 암호 알고리즘이다. 각 행렬 요소는 32비트의 정수다.(512-bit blocks) 행렬은 16진수로 표현하였다.
-20라운드라서 ChaCha20이다. 
+ChaCha20은 4x4 행렬을 사용하는 블록 암호 알고리즘이다.(정확히는 strean cipher) 각 행렬 요소는 32비트의 정수다.(512-bit blocks이고, 세세하게는 32-bit constant 4개, 256-bit key, 32-bit block counter, 96-bit nonce로 구성 되어있다.) 행렬은 16진수로 표현하였다.
+
+참고로 20라운드라서 ChaCha20이다. 
 
 ```
     +-----+-----+-----+-----+
@@ -136,29 +137,26 @@ The matrix notation is more visually convenient and gives a better notion as to
 why some rounds are called "column rounds" while others are called "diagonal rounds".
 ```
 
-아래는 Reference에서 가져온 C언어 코드이다. 이보다 깔끔하게 코드를 짠건 없는 것 같다.
-```c
-#define ROT_L32(x, n) x = (x << n) | (x >> (32 - n))
-#define QUARTERROUND(a, b, c, d)       \
-    a += b;  d ^= a;  ROT_L32(d, 16);  \
-    c += d;  b ^= c;  ROT_L32(b, 12);  \
-    a += b;  d ^= a;  ROT_L32(d,  8);  \
-    c += d;  b ^= c;  ROT_L32(b,  7)
+아래는 rfc7539 2-3 내용이다.
+```r
+   ChaCha20 runs 20 rounds, alternating between "column rounds" and
+   "diagonal rounds".  Each round consists of four quarter-rounds, and
+   they are run as follows.  Quarter rounds 1-4 are part of a "column"
+   round, while 5-8 are part of a "diagonal" round:
 
-for (int i = 0; i < 10; i++) { // 20 rounds, 2 rounds per loop.
-    QUARTERROUND(block[0], block[4], block[ 8], block[12]); // column 1
-    QUARTERROUND(block[1], block[5], block[ 9], block[13]); // column 2
-    QUARTERROUND(block[2], block[6], block[10], block[14]); // column 3
-    QUARTERROUND(block[3], block[7], block[11], block[15]); // column 4
-    QUARTERROUND(block[0], block[5], block[10], block[15]); // diagonal 1
-    QUARTERROUND(block[1], block[6], block[11], block[12]); // diagonal 2
-    QUARTERROUND(block[2], block[7], block[ 8], block[13]); // diagonal 3
-    QUARTERROUND(block[3], block[4], block[ 9], block[14]); // diagonal 4
-}
+   1.  QUARTERROUND ( 0, 4, 8,12)
+   2.  QUARTERROUND ( 1, 5, 9,13)
+   3.  QUARTERROUND ( 2, 6,10,14)
+   4.  QUARTERROUND ( 3, 7,11,15)
+   5.  QUARTERROUND ( 0, 5,10,15)
+   6.  QUARTERROUND ( 1, 6,11,12)
+   7.  QUARTERROUND ( 2, 7, 8,13)
+   8.  QUARTERROUND ( 3, 4, 9,14)
 ```
 **Reference**
 
 https://loup-vaillant.fr/tutorials/chacha20-design \
 https://cr.yp.to/chacha/chacha-20080128.pdf \
-https://datatracker.ietf.org/doc/html/rfc7539#section-2.3
+https://datatracker.ietf.org/doc/html/rfc7539#section-2.3 \
+https://android.googlesource.com/kernel/common/+/1855aaccd74c/lib/chacha20.c
  
