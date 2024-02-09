@@ -52,9 +52,16 @@ int main(void) {
 //     for (int i = 0; i < 29; ++i) {
 //         printf("%08x ", thirty_two_byte_array[i]);
 //     }
-    
+    printf("====== Encryption Test ======\n\n");
+    printf("plaintext is:\n");
+    for (int i = 0; i < 114; i++) {
+        if (i != 0 && i % 16 == 0)
+            printf("\n");
+        printf("0x%02x ", plaintext[i]);
+    }
+    printf("\n\n");
     chacha20_encrypt(key, counter, nonce, (uint32_t *)plaintext, (uint32_t *)ciphertext, sizeof(plaintext));
-    printf("User result:\n");
+    printf("User's ciphertext:\n");
     for (int i = 0; i < 114; i++) {
         if (i != 0 && i % 16 == 0)
             printf("\n");
@@ -69,4 +76,18 @@ int main(void) {
     printf("0x07 0xca 0x0d 0xbf 0x50 0x0d 0x6a 0x61 0x56 0xa3 0x8e 0x08 0x8a 0x22 0xb6 0x5e\n");
     printf("0x52 0xbc 0x51 0x4d 0x16 0xcc 0xf8 0x06 0x81 0x8c 0xe9 0x1a 0xb7 0x79 0x37 0x36\n");
     printf("0x5a 0xf9 0x0b 0xbf 0x74 0xa3 0x5b 0xe6 0xb4 0x0b 0x8e 0xed 0xf2 0x78 0x5e 0x42\n0x87 0x4d\n");
+
+    printf("\n\n====== Decryption Test ======\n\n");
+    chacha20_encrypt(key, counter, nonce, (uint32_t *)ciphertext, (uint32_t *)ciphertext, sizeof(ciphertext));
+    printf("Hexadecimal type:\n");
+    for (int i = 0; i < 114; i++) {
+        if (i != 0 && i % 16 == 0)
+            printf("\n");
+        printf("0x%02x ", ciphertext[i]);
+    }
+    printf("\n\nCharicters type:\n");
+    for (int i = 0; i < 114; i++) {
+        printf("%c", ciphertext[i]);
+    }
+    printf("\n");
 }
