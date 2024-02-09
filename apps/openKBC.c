@@ -9,7 +9,8 @@ void usage()
     printf("Usage: openKBC [options] <cipher> <mode> <plaintext or ciphertext> <key> <iv>...\n");
     printf("Sample1: openKBC -e aes128 ecb \"With great power comes great responsibility\" spiderman0000000 0\n");
     printf("Sample2: openKBC -e aes128 cbc \"With great power comes great responsibility\" spiderman0000000 01234567890123456\n");
-    printf("Sample3: openKBC rsa2048 \"OpenSSL RSA Enc Dec Test\"\n\n");
+    printf("Sample3: openKBC rsa2048 \"OpenSSL RSA Enc Dec Test\"\n");
+    printf("Sample4: openKBC -e chacha20 \"chacha20 Test\" <256-bit key> <32-bit counter> <96-bit nonce>\n\n");
     printf("-h is help option\n");
 }
 
@@ -35,6 +36,10 @@ void help()
 
     printf("\n");
     printf("seed");
+
+    printf("\n\n");
+    printf("Stream cipher commands:\n");
+    printf("chacha20");
 
     printf("\n\n");
     printf("Modes of operation commands:\n");
@@ -168,6 +173,23 @@ int main(int argc, char *argv[]) {
             cipher = ARIA256_ENC;
         }else if (strcmp(argv[2], "seed") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Enc;
+        }else if (strcmp(argv[2], "chacha20") == 0) {
+            u32 key[8] = {0,};
+            u32 counter = 0;
+            u32 nonce[3] = {0,};
+            memcpy(key, argv[4], strlen(argv[4]));
+            counter = (u32)atoi(argv[5]);
+            memcpy(nonce, argv[6], strlen(argv[6]));
+
+            u8 input[strlen(argv[3])]; // it only enable in linux, not in windows
+            u8 output[strlen(argv[3])]; // it only enable in linux, not in windows
+            memcpy(input, argv[3], strlen(argv[3]));
+
+            chacha20_encrypt(key, counter, nonce, (u32 *)input, (u32 *)output, strlen(argv[3]));
+            for (size_t i = 0; i < strlen(argv[3]); i++)
+                printf("%02x", output[i]);
+            printf("\n");
+            return 0;
         }else{
             usage();
             return 3;
@@ -236,7 +258,28 @@ int main(int argc, char *argv[]) {
             cipher = ARIA256_DEC;
         }else if (strcmp(argv[2], "seed") == 0){
             cipher = (void (*)(uint8_t *, uint8_t *, uint8_t *))SEED_Dec;
-        }else{
+        }else if (strcmp(argv[2], "chacha20") == 0) {
+            size_t hexStringLength_ = strlen(argv[3]);
+            size_t byteLength_ = (hexStringLength_ / 2) + (hexStringLength_ % 2);
+            
+            u8 input[byteLength_]; // it only enable in linux, not in windows
+            u8 output[byteLength_ + 1]; // it only enable in linux, not in windows
+
+            // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환
+            hexStringToBytes(argv[3], input, byteLength_);
+
+            u32 key[8] = {0,};
+            u32 counter = 0;
+            u32 nonce[3] = {0,};
+            memcpy(key, argv[4], strlen(argv[4]));
+            counter = (u32)atoi(argv[5]);
+            memcpy(nonce, argv[6], strlen(argv[6]));
+
+            chacha20_encrypt(key, counter, nonce, (u32 *)input, (u32 *)output, byteLength_);
+            output[byteLength_] = '\0';
+            printf("%s\n", output);
+            return 0;
+        }else {
             usage();
             return 3;
         }
