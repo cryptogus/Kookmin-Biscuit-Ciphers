@@ -129,7 +129,7 @@ ChaCha20에서 열 벡터 (columns vecotr)는 다음과 같이 정의할 수 있
 
 ## Quarter Round연산 (column rounds)
 ChaCha20의 Quarter Round를 수행하는 과정에서는 특정한 행렬의 요소에 대해 32-bit modulo덧셈(`+`), XOR(`^`), 그리고 Left Rotation of bits (<<<) 연산들이 적용된다.  
-![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/190ca733-af1c-4776-9001-2b3853d2f2fd)
+![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/190ca733-af1c-4776-9001-2b3853d2f2fd)  
 출처 - https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant  
 
 C언어 느낌으로 pseudo code를 나타내면 아래와 같다. (나도 그냥 reference꺼 가져와서 썻다.)
@@ -243,7 +243,8 @@ why some rounds are called "column rounds" while others are called "diagonal rou
 
 ## The ChaCha20 Encryption Algorithm
 ![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/8a670498-9c77-4cea-8e71-96d3a5fdd660)  
-출처 - https://en.wikipedia.org/wiki/ChaCha20-Poly1305
+출처 - https://en.wikipedia.org/wiki/ChaCha20-Poly1305  
+
 **Reference**
 
 https://loup-vaillant.fr/tutorials/chacha20-design \
