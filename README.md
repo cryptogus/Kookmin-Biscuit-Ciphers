@@ -22,7 +22,7 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - ARIA: ARIA-128, ARIA-192, ARIA-256
 
 **Stream Cipher**
-- ChaCha20
+- ChaCha20 (Not yet reflected in the GUI)
 
 **Public-key cryptography(asymmetric cryptography)**
 - RSA: RSA2048
@@ -89,6 +89,7 @@ On Ubuntu:
         ├── pipo_test
         ├── lea_test
         ├── seed_test
+        ├── chacha20_test
         ├── rsa2048_test
         └── padding_test
     ```
