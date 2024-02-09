@@ -68,13 +68,13 @@ int main(void) {
                          0x03020100,  0x07060504,  0x0b0a0908,  0x0f0e0d0c,
                          0x13121110,  0x17161514,  0x1b1a1918,  0x1f1e1d1c,
                          0x00000001,  0x09000000,  0x4a000000,  0x00000000};
-
-   chacha20_block(block);
+    uint32_t out[16];
+   chacha20_block(block, out);
    printf("User result:\n");
    for (int i = 0; i < 16; i++) {
     if (i != 0 && i % 4 == 0)
             printf("\n");
-        printf("0x%08x ", block[i]);
+        printf("0x%08x ", out[i]);
    }
    printf("\n\nAnswer is:\n");
 
