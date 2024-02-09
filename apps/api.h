@@ -48,14 +48,12 @@ void LEA256_DEC(uint32_t plaintext[], uint32_t ciphertext[], uint32_t Key[]);
 /**
  * SEED, reference: https://seed.kisa.or.kr/kisa/algorithm/EgovSeedInfo.do
 */
-
 void SEED_Enc(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
 void SEED_Dec(uint32_t* Ciphertext, uint32_t* Plaintext, uint32_t* Key);
 
 /**
  * ARIA, reference: https://seed.kisa.or.kr/kisa/Board/19/detailView.do
 */
-
 void ARIA128_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]);
 void ARIA128_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]);
 
@@ -66,11 +64,19 @@ void ARIA256_ENC(uint8_t ciphertext[], uint8_t plaintext[], uint8_t key[]);
 void ARIA256_DEC(uint8_t plaintext[], uint8_t ciphertext[], uint8_t key[]);
 
 /**
+ * Stream Cipher
+*/
+void chacha20_encrypt(uint32_t *key, uint32_t counter, uint32_t *nonce, uint32_t *src, uint32_t *dst, uint64_t len);
+
+/**
  * padding
 */
 unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *len);
 unsigned char *pkcs7_depadding(unsigned char *input, size_t *len);
 
+/**
+ * modes of operation
+*/
 void ECB(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
 
 void CBC_enc(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
