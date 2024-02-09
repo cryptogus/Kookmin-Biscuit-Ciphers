@@ -128,7 +128,9 @@ ChaCha20에서 열 벡터 (columns vecotr)는 다음과 같이 정의할 수 있
 사실 별건 아니고 ChaCha20에서 수행하는 Quarter Round연산이 열(columns)과 대각선(diagonal) 순으로 일어나기 때문에 미리 정의해둔 거다.
 
 ## Quarter Round연산 (column rounds)
-ChaCha20의 Quarter Round를 수행하는 과정에서는 특정한 행렬의 요소에 대해 32-bit modulo덧셈(`+`), XOR(`^`), 그리고 Left Rotation of bits (<<<) 연산들이 적용된다.
+ChaCha20의 Quarter Round를 수행하는 과정에서는 특정한 행렬의 요소에 대해 32-bit modulo덧셈(`+`), XOR(`^`), 그리고 Left Rotation of bits (<<<) 연산들이 적용된다.  
+![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/190ca733-af1c-4776-9001-2b3853d2f2fd)
+출처 - https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant  
 
 C언어 느낌으로 pseudo code를 나타내면 아래와 같다. (나도 그냥 reference꺼 가져와서 썻다.)
 ```c
@@ -187,29 +189,61 @@ why some rounds are called "column rounds" while others are called "diagonal rou
 
 요기서 끝이 아니라 rfc7539에서의 ChaCha20 Block Function in Pseudocode까지 봐야 [overview]에서 봤던 First 과정이 된다. 
 
-```
-inner_block (state):
-         Qround(state, 0, 4, 8,12)
-         Qround(state, 1, 5, 9,13)
-         Qround(state, 2, 6,10,14)
-         Qround(state, 3, 7,11,15)
-         Qround(state, 0, 5,10,15)
-         Qround(state, 1, 6,11,12)
-         Qround(state, 2, 7, 8,13)
-         Qround(state, 3, 4, 9,14)
-         end
 
-      chacha20_block(key, counter, nonce):
-         state = constants | key | counter | nonce
-         working_state = state
-         for i=1 upto 10
-            inner_block(working_state)
-            end
-         state += working_state
-         return serialize(state)
-         end
+## The ChaCha20 Block Function
 
-```
+- The ChaCha20 Block Function in Pseudocode (Qround mean QUARTERROUND)
+  ```
+  inner_block (state):
+           Qround(state, 0, 4, 8,12)
+           Qround(state, 1, 5, 9,13)
+           Qround(state, 2, 6,10,14)
+           Qround(state, 3, 7,11,15)
+           Qround(state, 0, 5,10,15)
+           Qround(state, 1, 6,11,12)
+           Qround(state, 2, 7, 8,13)
+           Qround(state, 3, 4, 9,14)
+           end
+
+        chacha20_block(key, counter, nonce):
+           state = constants | key | counter | nonce
+           working_state = state
+           for i=1 upto 10
+              inner_block(working_state)
+              end
+           state += working_state
+           return serialize(state)
+           end
+  ```
+- state(512-bit)
+  ```
+  The ChaCha20 state is initialized as follows:
+
+   o  The first four words (0-3) are constants: 0x61707865, 0x3320646e,
+      0x79622d32, 0x6b206574.
+
+   o  The next eight words (4-11) are taken from the 256-bit key by
+      reading the bytes in little-endian order, in 4-byte chunks.
+
+   o  Word 12 is a block counter.  Since each block is 64-byte, a 32-bit
+      word is enough for 256 gigabytes of data.
+
+   o  Words 13-15 are a nonce, which should not be repeated for the same
+      key.  The 13th word is the first 32 bits of the input nonce taken
+      as a little-endian integer, while the 15th word is the last 32
+      bits.
+
+       cccccccc  cccccccc  cccccccc  cccccccc
+       kkkkkkkk  kkkkkkkk  kkkkkkkk  kkkkkkkk
+       kkkkkkkk  kkkkkkkk  kkkkkkkk  kkkkkkkk
+       bbbbbbbb  nnnnnnnn  nnnnnnnn  nnnnnnnn
+
+   c=constant k=key b=blockcount n=nonce
+  ```
+
+## The ChaCha20 Encryption Algorithm
+![image](https://github.com/cryptogus/Kookmin-Block-Cipher/assets/60291830/8a670498-9c77-4cea-8e71-96d3a5fdd660)  
+출처 - https://en.wikipedia.org/wiki/ChaCha20-Poly1305
 **Reference**
 
 https://loup-vaillant.fr/tutorials/chacha20-design \
