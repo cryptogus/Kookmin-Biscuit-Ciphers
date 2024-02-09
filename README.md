@@ -21,6 +21,9 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 - SEED: SEED128
 - ARIA: ARIA-128, ARIA-192, ARIA-256
 
+**Stream Cipher**
+- ChaCha20
+
 **Public-key cryptography(asymmetric cryptography)**
 - RSA: RSA2048
 
