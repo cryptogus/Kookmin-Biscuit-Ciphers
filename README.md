@@ -1,4 +1,4 @@
-# Kookmin Block Cipher (KBC) for students
+# Kookmin Biscuit Cipher (KBC) for students
 KBC is an C program for testing block cipher.
 
 Currently, it has been tested only on Linux in 2023.11
