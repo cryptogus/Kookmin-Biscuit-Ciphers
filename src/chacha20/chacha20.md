@@ -1,7 +1,6 @@
 ## Copyright and License
 
 © 2024, cryptogus
-![image](https://github.com/cryptogus/Kookmin-Biscuit-Ciphers/assets/60291830/ec9a50bd-5c44-48d5-96bf-be8b8412a121)
 
 This work is licensed under a [CC BY-NC-ND 4.0 DEED](https://creativecommons.org/licenses/by-nc-nd/4.0/).
 
