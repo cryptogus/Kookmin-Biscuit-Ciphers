@@ -1,3 +1,6 @@
+#!/bin/bash
+#/bin/sh -> bash 지원 안될 때 #앞에 !붙여서 사용
+
 # Update Ubuntu package
 # sudo apt update
 # sudo apt upgrade
