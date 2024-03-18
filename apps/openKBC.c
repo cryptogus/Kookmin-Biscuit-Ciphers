@@ -21,7 +21,7 @@ void help()
     printf("Options:\n");
     printf("-e encrypt\n");
     printf("-d decrypt\n\n");
-    
+
     printf("Block ciphers commands:\n");
     printf("aes128\taes192\taes256");
 
@@ -43,12 +43,12 @@ void help()
 
     printf("\n\n");
     printf("Modes of operation commands:\n");
-    printf("ecb\tcbc");
-
-    printf("\n\n");
+    printf("ecb\tcbc\n");
+#ifdef USE_OPENSSL
+    printf("\n");
     printf("Public-key cryptography:\n");
     printf("rsa2048\n");
-
+#endif
 }
 
 // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환하는 함수
@@ -61,12 +61,12 @@ void hexStringToBytes(const char* hexString, unsigned char* bytes, size_t length
 }
 
 int main(int argc, char *argv[]) {
-    
-    /* 
+
+    /*
     FILE *inputFile, *outputFile;
     inputFile = fopen(inputFileName, "rb");
     outputFile = fopen(outputFileName, "wb");
-    
+
 
     if (inputFile == NULL || outputFile == NULL) {
         perror("Error opening files");
@@ -92,7 +92,7 @@ int main(int argc, char *argv[]) {
 
     }else if (strcmp(argv[1], "-d") == 0) {
         goto dec;
-
+#ifdef USE_OPENSSL
     }else if (strcmp(argv[1], "rsa2048") == 0) {
         RSA *private_key = NULL;
         RSA *public_key = NULL;
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
         printf("================ Key pair ================\n");
         print_public_key(public_key);
         print_private_key(private_key);
-        
+
         size_t text_length = strlen(argv[2]);
 
         unsigned char cipher_text[KEY_LENGTH / 8];
@@ -137,13 +137,14 @@ int main(int argc, char *argv[]) {
         RSA_free(public_key);
 
         return 2;
+#endif
     }else{
         usage();
         return 2;
     }
     // 함수 포인터로 필요한 block cipher 함수 받아옴
     void (*cipher)(uint8_t *, uint8_t *, uint8_t *);
-    
+
     enc:
 
         if (strcmp(argv[2], "aes128") == 0){
@@ -199,7 +200,7 @@ int main(int argc, char *argv[]) {
         size_t len = 0;
         unsigned char *pad_plainText = pkcs7_padding((unsigned char *)argv[4], BLOCK_SIZE, &len);
         unsigned char *cipherText = (unsigned char *)calloc(sizeof(unsigned char), len);
-        
+
         if (strcmp(argv[3], "ecb") == 0){
             // argv[5]에 16자리 문자열을 입력하면 실제 메모리에는 '\0' 포함 17-byte를 사용하지만 ECB 함수에서는 새로운 변수에 키 길이만큼(strlen 사용)만 사용하기에 그대로 인자로 넘겨주기에 문제 없음
             ECB(cipher, (unsigned char *)argv[5],BLOCK_SIZE, len, pad_plainText, cipherText);
@@ -219,7 +220,7 @@ int main(int argc, char *argv[]) {
 
         free(pad_plainText);
         free(cipherText);
-        
+
         return 0;
 
     dec:
@@ -231,7 +232,7 @@ int main(int argc, char *argv[]) {
 
         // 16진수 문자열을 2바이트씩 분할하고 1바이트로 변환
         hexStringToBytes(argv[4], cipherText2, byteLength);
-        
+
         if (strcmp(argv[2], "aes128") == 0){
             cipher = AES128_Decrypt;
         }else if (strcmp(argv[2], "aes192") == 0){
@@ -261,7 +262,7 @@ int main(int argc, char *argv[]) {
         }else if (strcmp(argv[2], "chacha20") == 0) {
             size_t hexStringLength_ = strlen(argv[3]);
             size_t byteLength_ = (hexStringLength_ / 2) + (hexStringLength_ % 2);
-            
+
             u8 input[byteLength_]; // it only enable in linux, not in windows
             u8 output[byteLength_ + 1]; // it only enable in linux, not in windows
 
@@ -295,7 +296,7 @@ int main(int argc, char *argv[]) {
         /*for (size_t i = 0; i < byteLength; i++){
             printf("%02x ", decPlainText[i]);
         }*/
-        
+
         unsigned char *decPlainText2 = pkcs7_depadding(decPlainText, &byteLength);
         /*for (size_t i = 0; i < byteLength; i++){
             printf("%02x ", decPlainText2[i]);

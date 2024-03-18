@@ -12,7 +12,7 @@ endif()
 
 project(openKBC LANGUAGES C)
 
-set(SOURCE   
+set(SOURCE
 ${CMAKE_SOURCE_DIR}/src
 )
 
@@ -35,7 +35,7 @@ if(USE_OPENSSL)
     # OpenSSL을 찾습니다.
     # REQUIRED 키워드가 사용되었기 때문에 OpenSSL을 찾을 수 없으면 CMake는 에러를 발생시키고 빌드를 중단합니다.
     find_package(OpenSSL REQUIRED)
-
+    target_compile_options(${CMAKE_PROJECT_NAME} PRIVATE -DUSE_OPENSSL)
     if(OPENSSL_FOUND)
         message(STATUS "OpenSSL found. Version: ${OPENSSL_VERSION}")
         include_directories(${OPENSSL_INCLUDE_DIR})

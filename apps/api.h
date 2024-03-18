@@ -82,6 +82,7 @@ void ECB(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *key, size_t 
 void CBC_enc(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
 void CBC_dec(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des);
 
+#ifdef USE_OPENSSL
 #include <openssl/rsa.h>
 #include <openssl/pem.h>
 #include <openssl/bn.h>
@@ -95,7 +96,7 @@ int rsa_decrypt(const unsigned char *cipher_text, size_t cipher_length, RSA *pri
 void print_private_key(RSA *private_key);
 void print_public_key(RSA *public_key);
 int encrypt_message(const char *message, RSA *public_key, unsigned char **encrypted_message, size_t *encrypted_len);
-
+#endif
 #ifdef __cplusplus
 }
 #endif
