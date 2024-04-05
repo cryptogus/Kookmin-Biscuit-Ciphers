@@ -9,8 +9,12 @@ void usage()
     printf("Usage: openKBC [options] <cipher> <mode> <plaintext or ciphertext> <key> <iv>...\n");
     printf("Sample1: openKBC -e aes128 ecb \"With great power comes great responsibility\" spiderman0000000 0\n");
     printf("Sample2: openKBC -e aes128 cbc \"With great power comes great responsibility\" spiderman0000000 01234567890123456\n");
+#ifdef USE_OPENSSL
     printf("Sample3: openKBC rsa2048 \"OpenSSL RSA Enc Dec Test\"\n");
     printf("Sample4: openKBC -e chacha20 \"chacha20 Test\" <256-bit key> <32-bit counter> <96-bit nonce>\n\n");
+#else
+    printf("Sample3: openKBC -e chacha20 \"chacha20 Test\" <256-bit key> <32-bit counter> <96-bit nonce>\n\n");
+#endif
     printf("-h is help option\n");
 }
 

@@ -12,6 +12,8 @@ add_subdirectory(aria)
 set(crypto_OBJS ${crypto_OBJS} ${ARIA})
 add_subdirectory(chacha20)
 set(crypto_OBJS ${crypto_OBJS} ${CHACHA20})
+
+option(USE_OPENSSL "Use OpenSSL for encryption" ON)
 if (USE_OPENSSL)
     add_subdirectory(rsa)
     set(crypto_OBJS ${crypto_OBJS} ${RSA2048})
