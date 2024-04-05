@@ -37,6 +37,7 @@ This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 **Modes of Operation**
 - ECB
 - CBC
+- CTR (I developed the code so that it is not available for blocks that are not 16 bytes in size.)
 ## Windows
 1. git
    https://git-scm.com/download/win
