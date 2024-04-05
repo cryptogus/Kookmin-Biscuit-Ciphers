@@ -13,8 +13,8 @@
 cmake -B build -S . && cd build
 make -j$(nproc)
 # build openKBC without OpenSSL
-cmake -B build_non_openssl -S . -DUSE_OPENSSL=OFF && cd build_non_openssl
-make -j$(nproc)
+# cmake -B build_non_openssl -S . -DUSE_OPENSSL=OFF && cd build_non_openssl
+# make -j$(nproc)
 # build Qt (with OpenSSL)
 cd ../KBC_gui
 mkdir build
