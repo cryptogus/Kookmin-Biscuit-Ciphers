@@ -92,13 +92,19 @@ On Ubuntu:
         ├── CBC_test
         ├── ECB_test
         ├── aes_test
+        ├── AES-KEY-EXPANSION-TEST
         ├── aria_test
         ├── pipo_test
         ├── lea_test
         ├── seed_test
         ├── chacha20_test
         ├── rsa2048_test
+        ├── chacha_block_test
+        ├── chacha_quarter_round_test
+        ├── chacha_encrypt_test
         └── padding_test
+    KBC_gui/
+    └──libKBC.so
     ```
 
 3. Test
