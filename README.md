@@ -11,6 +11,9 @@ Currently, it has been tested only on Linux in 2023.11
 
 This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 
+**Cryptographic Calculation Tool**  
+http://cryptomanager.com/
+
 ### Environmental System Information
 **CPU: quad core 11th Gen Intel Core i7-1165G7**\
 **Kernel: 5.15.133.1-microsoft-standard-WSL2 x86_64**\
