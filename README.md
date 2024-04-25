@@ -40,7 +40,7 @@ http://cryptomanager.com/
 **Modes of Operation**
 - ECB
 - CBC
-- CTR (I developed the code so that it is not available for blocks that are not 16 bytes in size.)
+- [CTR](https://crypto.stackexchange.com/questions/18267/how-do-we-compute-iv1-in-ctr-mode) (I developed the code so that it is not available for blocks that are not 16 bytes in size.)
 ## Windows
 1. git
    https://git-scm.com/download/win
