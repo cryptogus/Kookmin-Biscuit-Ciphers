@@ -40,11 +40,13 @@ void CTR(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *Nonce, uint8
     else if (block_size == 8) // 8 byte, PIPO
         k = 3;
     
-    // initializaion Counter(0)||Nonce -> AES 기준, 총 16 byte (문서는 Nonce||Counter(0)이지만 그게 그거지 않나 싶음)
-    int nonce_size = block_size >> 1;
+    // initializaion -> AES 기준, 총 16 byte (문서는 Nonce||Counter(0)이지만 지금은 IV[0]||Counter(IV[1]) 인 상황)
+    int nonce_size = block_size;
     uint64_t counter[2] = {0, };
     memcpy(counter, Nonce, nonce_size); // get nonce
-    uint64_t ctr = 0;
+    //uint64_t ctr = 0; // counter를 0부터 시작할 때. 반드시 ctr의 경우 각 암호 + ctr로 crypto calculator 사이트에서 테스트 벡터 확인 해야함
+    // https://devtoolcafe.com/tools/des
+    uint64_t ctr = little_to_big_endian(counter[1]); // 가져올 땐 big endian으로 바꾸고
     // block size가 8 바이트일 때는 사용 불가능한 코드
     // if (block_size == 8) {
     //     counter[0] >>= 32;
@@ -53,7 +55,7 @@ void CTR(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *Nonce, uint8
 
     for (size_t i = 0; i < len/block_size; i++)
     {
-        counter[1] = little_to_big_endian(ctr++);
+        counter[1] = little_to_big_endian(ctr++); // 돌려서 사용할 땐 little endian으로 바꾸고
         memcpy(key2, key, strlen(key));
         cipher(des +(i << k), (uint8_t *)counter, key2);
         for (int j = 0; j < block_size; j++) {
