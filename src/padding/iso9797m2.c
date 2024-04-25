@@ -1,8 +1,8 @@
-#include "pkcs7.h"
 #include <stdio.h>
+#include "iso9797m2.h"
 
-// PKCS#7 패딩 함수
-unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *len) {
+// ISO9797M2 패딩 함수
+unsigned char *ios9797m2_padding(unsigned char *input, size_t block_size, size_t *len) {
     
     // 패딩 값 계산
     size_t padding_value = block_size - (strlen(input) % block_size);
@@ -22,34 +22,37 @@ unsigned char *pkcs7_padding(unsigned char *input, size_t block_size, size_t *le
     }
 
     strcpy(result, input);
-    
-    // 패딩 적용 & \0 제거, Decode시 문자열로 출력하려면 마지막에 \0 추가 필요
-    // for (size_t i = 0; i < padding_value; ++i) {
-    //     result[strlen(input) + i] = padding_value;
-    // }
-    memset(result + strlen(input), padding_value, padding_value);
+    memset(result + strlen(input), 0x0, padding_value);
+    result[strlen(input)] = 0x80;
+
     return result;
 }
 
-// PKCS#7 패딩 제거를 위한 함수
-unsigned char *pkcs7_depadding(unsigned char *input, size_t *len) {
+// ISO9797M2 패딩 제거를 위한 함수
+unsigned char *ios9797m2_depadding(unsigned char *input, size_t *len) {
     
     // 패딩 값 계산
     size_t padding_value = input[*len - 1];
     
     // free 필요
     unsigned char *result = (unsigned char *)malloc(sizeof(unsigned char)* (*len + 1));
-
-    for (int i = 1; i < padding_value; i++)
-    {
-        if (padding_value != input[*len - 1 - i])
-        {
-            padding_value = 0;
+    int i, cnt = 1;
+    for (i = 1; i <= 8; i++) {
+          if (input[*len - i] == 0x80) {  
+                *len -= cnt;
+                break;
+          }else if (input[*len - i] == 0) {
+                cnt++;
+            if (cnt == 9) { // 8 bytes that are zero -> error 
+                fprintf(stderr, "ISO97979M2 depadding error, input string is strange\n");
+                break;  
+            }
+          }
+          else {// Incorrect padding
+            printf(stderr, "ISO97979M2 depadding error, input string is not ISO97979M2 padding\n");
             break;
+          }
         }
-    }
-
-    *len = *len - padding_value;
     
     
     if (result == NULL) {
