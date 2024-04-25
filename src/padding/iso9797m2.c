@@ -29,7 +29,7 @@ unsigned char *ios9797m2_padding(unsigned char *input, size_t block_size, size_t
 }
 
 // ISO9797M2 패딩 제거를 위한 함수
-unsigned char *ios9797m2_depadding(unsigned char *input, size_t *len) {
+unsigned char *ios9797m2_depadding(unsigned char *input, size_t block_size, size_t *len) {
     
     // 패딩 값 계산
     size_t padding_value = input[*len - 1];
@@ -43,13 +43,13 @@ unsigned char *ios9797m2_depadding(unsigned char *input, size_t *len) {
                 break;
           }else if (input[*len - i] == 0) {
                 cnt++;
-            if (cnt == 9) { // 8 bytes that are zero -> error 
+            if (cnt == block_size + 1) { // 8 or 16 bytes that are zero -> error// 만약 16 byte 크기 block이라면 패딩 길이가 16을 넘길 수 없다. des나 pipo같은 암호도 8 byte를 넘길 수 없다.
                 fprintf(stderr, "ISO97979M2 depadding error, input string is strange\n");
                 break;  
             }
           }
           else {// Incorrect padding
-            printf(stderr, "ISO97979M2 depadding error, input string is not ISO97979M2 padding\n");
+            fprintf(stderr, "ISO97979M2 depadding error, input string is not ISO97979M2 padding\n");
             break;
           }
         }
