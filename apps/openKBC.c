@@ -47,7 +47,7 @@ void help()
 
     printf("\n\n");
     printf("Modes of operation commands:\n");
-    printf("ecb\tcbc\n");
+    printf("ecb\tcbc\tctr\n");
 #ifdef USE_OPENSSL
     printf("\n");
     printf("Public-key cryptography:\n");
@@ -211,6 +211,8 @@ int main(int argc, char *argv[]) {
 
         }else if (strcmp(argv[3], "cbc") == 0){
             CBC_enc(cipher, (unsigned char *)argv[6], (unsigned char *)argv[5],BLOCK_SIZE, len, pad_plainText, cipherText);
+        }else if (strcmp(argv[3], "ctr") == 0) {
+            CTR(cipher, (unsigned char *)argv[6], (unsigned char *)argv[5],BLOCK_SIZE, len, pad_plainText, cipherText);
         }else {
             usage();
             return 4;
@@ -293,6 +295,8 @@ int main(int argc, char *argv[]) {
             ECB(cipher, (unsigned char *)argv[5],BLOCK_SIZE, byteLength, cipherText2, decPlainText);
         }else if (strcmp(argv[3], "cbc") == 0) {
             CBC_dec(cipher, (unsigned char *)argv[6], (unsigned char *)argv[5],BLOCK_SIZE, byteLength, cipherText2, decPlainText);
+        }else if (strcmp(argv[3], "ctr") == 0) {
+            CTR(cipher, (unsigned char *)argv[6], (unsigned char *)argv[5],BLOCK_SIZE, byteLength, cipherText2, decPlainText);
         }else {
             usage();
             return 4;
