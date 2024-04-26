@@ -44,7 +44,8 @@ http://cryptomanager.com/
 
 https://crypto.stackexchange.com/questions/88783/ctr-block-generation  
 https://crypto.stackexchange.com/questions/18267/how-do-we-compute-iv1-in-ctr-mode  
-https://stackoverflow.com/questions/12529612/interoperability-of-aes-ctr-mode
+https://stackoverflow.com/questions/12529612/interoperability-of-aes-ctr-mode  
+https://github.com/openssl/openssl/blob/master/crypto/modes/ctr128.c - CTR mode is big-endian
 
 ## Windows
 1. git
