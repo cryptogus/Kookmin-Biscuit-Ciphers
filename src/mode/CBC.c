@@ -1,5 +1,10 @@
 #include "CBC.h"
-
+/* 
+typedef void (*cipher)(uint8_t *, uint8_t *, uint8_t *);
+void CBC_enc(cipher ciphers , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des) {
+    (*ciphers) (des + tmp ,src + tmp, key2);
+}*/
+ 
 void CBC_enc(void (*cipher)(uint8_t *, uint8_t *, uint8_t *) , uint8_t *IV, uint8_t *key, size_t block_size, size_t len, unsigned char *src, unsigned char *des) {
 
     uint8_t key2[32] = {0, };
