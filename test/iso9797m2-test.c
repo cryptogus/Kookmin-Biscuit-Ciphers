@@ -10,7 +10,7 @@ void usage()
 int main(int argc, char *argv[])
 {
     if (argc != 2)
-    {   
+    {
         usage();
         return -1;
     }
@@ -18,13 +18,13 @@ int main(int argc, char *argv[])
     // padding된 결과 배열의 길이
     size_t len = 0;
     unsigned char *pad_text = ios9797m2_padding(argv[1], 16, &len);
-    
-    printf("16 byte is 1-block\npadding %d: ",len);
+
+    printf("16 byte is 1-block\npadding %ld: ",len);
     for (size_t i = 0; i < len; i++)
     {
         printf("%02x ", pad_text[i]);
     }
-    
+
     // padding제거
     unsigned char *depad_text = ios9797m2_depadding(pad_text, 16, &len);
     printf("\ndepadding: ");

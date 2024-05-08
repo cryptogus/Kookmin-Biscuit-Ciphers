@@ -68,7 +68,7 @@ void eperm(uint32_t *in, uint8_t *out) {
 }
 
 // multiple bit selection function
-uint32_t perm(uint8_t *in, uint8_t *out, const int8_t *dperm, int32_t n) {
+void perm(uint8_t *in, uint8_t *out, const int8_t *dperm, int32_t n) {
   uint32_t nb = n >> 3;
   uint32_t nc = 8;
 
@@ -90,7 +90,6 @@ uint32_t perm(uint8_t *in, uint8_t *out, const int8_t *dperm, int32_t n) {
     }
     out[i] = temp;
   }
-  return 0x7f;
 }
 
 static void fround(uint32_t *lr, uint32_t *ki) {
@@ -101,22 +100,22 @@ static void fround(uint32_t *lr, uint32_t *ki) {
 
   /*** Expansion Permutation Box ***/
   eperm(&lr[1], (uint8_t *)in_temp);
-  printf("%x", in_temp[0]);
-  printf("%x \n", in_temp[1]);
+
   /*** XOR round key ***/
   in_temp[0] ^= ki[0];
   in_temp[1] ^= ki[1];
   uint8_t temp[8];
-  
+
   /*** fsbox ***/
   uint8_t *data = (uint8_t *)in_temp;
+
   int i;
   for(i=0;i<8;i++)
-    temp[i]=SBOX[(i<< 6) | (data[i] >> 2)];
+    temp[i]=SBOX[(i<< 6) | data[i]];
 
   for(i=0;i<4;i++)
     data[i]=temp[i*2+1] | (temp[i*2] << 4);
- 
+
 
   /*** Straight Permutation ***/
   perm((uint8_t *)in_temp, (uint8_t *)&out, PPERM, 32);
@@ -124,6 +123,7 @@ static void fround(uint32_t *lr, uint32_t *ki) {
   /*** f function end ***/
 
   out ^= lr[0];
+  lr[0] = lr[1];
   lr[1] = out;
 
 }
@@ -181,8 +181,6 @@ void des_encrypt(uint32_t *in, uint32_t *out, uint32_t *w) {
 
   /*** Initial Permutation (IP) ***/
   perm((uint8_t *)in, (uint8_t *)temp, IPPERM, 64);
-// printf("%x ",temp[0]);
-// printf("%x\n",temp[1]);
 
   for (i = 1; i <= 16; i++)
     fround(temp, w + ((i - 1) << 1));
@@ -225,7 +223,7 @@ void des_decrypt(uint32_t *in, uint32_t *out, uint32_t *w) {
  * @return 0 is fail, 1 is success
  */
 // int tdes_set_key(const uint32_t *key, size_t key_len) {
-  
+
 
 //   if (key_len == 16) {  // 128-bit key
 //     keyexpansion(ctx->w[0], (uint8_t *)key);
