@@ -1,5 +1,5 @@
 #include "tdes.h"
-
+#include <stdio.h>
 const uint8_t SBOX[512] = {
     14, 0,  4,  15, 13, 7,  1,  4,  2,  14, 15, 2,  11, 13, 8,  1,  3,  10, 10,
     6,  6,  12, 12, 11, 5,  9,  9,  5,  0,  3,  7,  8,  4,  15, 1,  12, 14, 8,
@@ -222,51 +222,149 @@ void des_decrypt(uint32_t *in, uint32_t *out, uint32_t *w) {
  *
  * @return 0 is fail, 1 is success
  */
-// int tdes_set_key(const uint32_t *key, size_t key_len) {
+int tdes_set_key(TDES_CTX *ctx, const uint32_t *key, size_t key_len) {
 
 
-//   if (key_len == 16) {  // 128-bit key
-//     keyexpansion(ctx->w[0], (uint8_t *)key);
-//     keyexpansion(ctx->w[1], (uint8_t *)(key + 2));
-//     memcpy(ctx->w[2], ctx->w[0], 128);
+  if (key_len == 16) {  // 128-bit key
+    keyexpansion(ctx->w[0], (uint8_t *)key);
+    keyexpansion(ctx->w[1], (uint8_t *)(key + 2));
+    memcpy(ctx->w[2], ctx->w[0], 128);
 
-//   } else if (key_len == 24) {  // 192-bit key
-//     keyexpansion(ctx->w[0], (uint8_t *)key);
-//     keyexpansion(ctx->w[1], (uint8_t *)(key + 2));
-//     keyexpansion(ctx->w[2], (uint8_t *)(key + 4));
+  } else if (key_len == 24) {  // 192-bit key
+    keyexpansion(ctx->w[0], (uint8_t *)key);
+    keyexpansion(ctx->w[1], (uint8_t *)(key + 2));
+    keyexpansion(ctx->w[2], (uint8_t *)(key + 4));
 
-//   } else {
-//     return (status_t){.value = kCryptoStatusBadArgs};
-//   }
-//   return (status_t){.value = kCryptoStatusOK};
-// }
+  } else {
+    return 0;
+  }
+  return 1;
+}
 
 /**
  * @return 0 is fail, 1 is success
  */
-// int TDES_enc(uint32_t *dest, uint32_t *src, uint32_t *w) {
+/**
+ * @return 0 is fail, 1 is success
+ */
+int TDES_enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src) {
+  if (ctx == NULL) {
+    return 0;
+  }
 
+  ctx->n = 0;  // round key counter
+  des_encrypt(ctx, src, dest);
+  ctx->n++;
+  des_decrypt(ctx, dest, dest);
+  ctx->n++;
+  des_encrypt(ctx, dest, dest);
 
-//   int n = 0;  // round key counter
-//   des_encrypt(src, dest);
-//   ctx->n++;
-//   des_decrypt(ctx, dest, dest);
-//   ctx->n++;
-//   des_encrypt(ctx, dest, dest);
+  return 1;
+}
 
-//   return (status_t){.value = kCryptoStatusOK};
-// }
+int TDES_dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src) {
+  if (ctx == NULL) {
+    return 0;
+  }
 
-// int TDES_dec(uint32_t *dest, uint32_t *src, uint32_t *key) {
+  create_mask(ctx);
 
-//   create_mask(ctx);
+  ctx->n = 2;  // round key counter
+  des_decrypt(ctx, src, dest);
+  ctx->n--;
+  des_encrypt(ctx, dest, dest);
+  ctx->n--;
+  des_decrypt(ctx, dest, dest);
 
-//   ctx->n = 2;  // round key counter
-//   des_decrypt(ctx, src, dest);
-//   ctx->n--;
-//   des_encrypt(ctx, dest, dest);
-//   ctx->n--;
-//   des_decrypt(ctx, dest, dest);
+  return 1;
+}
 
-//   return (status_t){.value = kCryptoStatusOK};
-// }
+int TDES_ECB_Enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len) {
+  for (; len > 0; src += 2, dest += 2, len -= 8) {
+    if (TDES_enc(ctx, dest, src) != 1)
+      return 0;
+  }
+  return 1;
+}
+
+int TDES_ECB_Dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len) {
+  for (; len > 0; src += 2, dest += 2, len -= 8) {
+    if (TDES_dec(ctx, dest, src) != 1)
+      return 0;
+  }
+  return 1;
+}
+
+int TDES_CBC_Enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len) {
+  uint32_t i;
+  uint32_t temp[2];
+  if (ctx->IV == NULL) {
+    return 0;
+  } else {
+    memcpy(temp, ctx->IV, 8);
+  }
+  for (; len > 0; src += 2, dest += 2, len -= 8) {
+    temp[0] ^= src[0];
+    temp[1] ^= src[1];
+
+    if (TDES_enc(ctx, dest, temp) != 1)
+      return 0;
+    memcpy(temp, dest, 8);
+  }
+  return 1;
+}
+
+int TDES_CBC_Dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len) {
+  uint32_t i;
+  uint32_t temp[2];
+  uint32_t P[2];
+  if (ctx->IV == NULL) {
+    return 0;
+  } else {
+    memcpy(temp, ctx->IV, 8);
+  }
+
+  for (; len > 0; src += 2, dest += 2, len -= 8) {
+    if (TDES_dec(ctx, P, src) != 1)
+      return 0;
+
+    dest[0] = temp[0] ^ P[0];
+    dest[1] = temp[1] ^ P[1];
+
+    memcpy(temp, src, 8);
+  }
+
+  return 1;
+}
+
+static uint32_t little_to_big_endian(uint32_t val) {
+  return ((val >> 24) & 0xFF) | ((val & 0xFF00) << 8) | ((val >> 8) & 0xFF00) |
+         ((val & 0xFF) << 24);
+}
+
+int TDES_CTR(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                         int32_t len) {
+  uint32_t temp[2];
+  uint32_t C[2];
+  uint32_t i, ctr;
+
+  if (ctx->IV != NULL) {
+    temp[0] = ctx->IV[0];
+  } else
+    return 0;
+
+  ctr = little_to_big_endian(ctx->IV[1]);
+
+  for (; len > 0; src += 2, dest += 2, len -= 8) {
+    temp[1] = little_to_big_endian(ctr++);
+    if (TDES_enc(ctx, C, temp) != 1)
+      return 0;
+    dest[0] = src[0] ^ C[0];
+    dest[1] = src[1] ^ C[1];
+  }
+  return 1;
+}
