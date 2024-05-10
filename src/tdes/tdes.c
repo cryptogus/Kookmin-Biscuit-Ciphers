@@ -1,5 +1,5 @@
 #include "tdes.h"
-#include <stdio.h>
+
 const uint8_t SBOX[512] = {
     14, 0,  4,  15, 13, 7,  1,  4,  2,  14, 15, 2,  11, 13, 8,  1,  3,  10, 10,
     6,  6,  12, 12, 11, 5,  9,  9,  5,  0,  3,  7,  8,  4,  15, 1,  12, 14, 8,
@@ -222,7 +222,7 @@ void des_decrypt(uint32_t *in, uint32_t *out, uint32_t *w) {
  *
  * @return 0 is fail, 1 is success
  */
-int tdes_set_key(TDES_CTX *ctx, const uint32_t *key, size_t key_len) {
+int TDES_set_key(TDES_CTX *ctx, const uint32_t *key, size_t key_len) {
 
 
   if (key_len == 16) {  // 128-bit key
@@ -252,12 +252,9 @@ int TDES_enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src) {
     return 0;
   }
 
-  ctx->n = 0;  // round key counter
-  des_encrypt(ctx, src, dest);
-  ctx->n++;
-  des_decrypt(ctx, dest, dest);
-  ctx->n++;
-  des_encrypt(ctx, dest, dest);
+  des_encrypt(src, dest, (uint32_t *)ctx->w[0]);
+  des_decrypt(dest, dest, (uint32_t *)ctx->w[1]);
+  des_encrypt(dest, dest, (uint32_t *)ctx->w[2]);
 
   return 1;
 }
@@ -267,14 +264,9 @@ int TDES_dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src) {
     return 0;
   }
 
-  create_mask(ctx);
-
-  ctx->n = 2;  // round key counter
-  des_decrypt(ctx, src, dest);
-  ctx->n--;
-  des_encrypt(ctx, dest, dest);
-  ctx->n--;
-  des_decrypt(ctx, dest, dest);
+  des_decrypt(src, dest, (uint32_t *)ctx->w[2]);
+  des_encrypt(dest, dest, (uint32_t *)ctx->w[1]);
+  des_decrypt(dest, dest, (uint32_t *)ctx->w[0]);
 
   return 1;
 }
