@@ -31,6 +31,7 @@ http://cryptomanager.com/
 - LEA:  LEA-128, LEA-192, LEA-256
 - SEED: SEED128
 - ARIA: ARIA-128, ARIA-192, ARIA-256
+- TDEA: Triple Data Encryption Algorithm(Triple DES): complete only test
 
 **Stream Cipher**
 - [ChaCha20](src/chacha20/chacha20.md)(Not yet reflected in the GUI)
