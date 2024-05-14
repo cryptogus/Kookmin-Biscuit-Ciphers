@@ -12,27 +12,19 @@
 #include "tdes.h"
 
 int main() {
-    FILE *fp_ecb = fopen("TDES_ECB_Monte.nif", "w");
+    FILE *fp_ecb = fopen("TDES_ECB_Monte.rsp", "w");
 
     FILE* ecb = fopen("TECBMonte3.rsp", "r");
 
     unsigned char tkey[24];
-    unsigned char plaintext[8];
-    unsigned char ciphertext[2][8];
-
-
-    const crypto_key_config_t config_tmp = {.version = kCryptoLibVersion1, .key_mode = kKeyModeDesEcb,
-                                          .key_length = 24, .hw_backed = kHardenedBoolFalse, .exportable = kHardenedBoolTrue,
-                                          .security_level = kSecurityLevelLow};
-    crypto_blinded_key_t key = {.config = config_tmp, .keyblob_length = 24, .keyblob = (uint32_t *)tkey, .checksum = 0};
-
-    crypto_word32_buf_t iv = {.data = (uint32_t *)NULL, .len = 0};
+    unsigned char state[8];
+    unsigned char tmp[2][8];
 
     if (fp_ecb == NULL || ecb == NULL) {
         fprintf(stderr, "Failed to open file.\n");
         return 1;
     }
-    fprintf(fp_ecb,"# CAVS 11.1 for NIF\n");
+    fprintf(fp_ecb,"# CAVS 11.1 for my TDEA\n");
     fprintf(fp_ecb,"# Config Info for : \"tdes_values\"\n");
     fprintf(fp_ecb,"# TDES Monte Carlo (Modes) Test for ECB\n");
     fprintf(fp_ecb,"# State : Encrypt and Decrypt\n");
@@ -59,7 +51,7 @@ int main() {
 		fscanf(ecb, "%2hhx", &tkey[j]);
     fseek(ecb, 14, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &plaintext[j]);
+		fscanf(ecb, "%2hhx", &state[j]);
 
     fprintf(fp_ecb, "[ENCRYPT]\n\n");
 
@@ -81,27 +73,28 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", state[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
 
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
-                memcpy(ciphertext[0], plaintext, 8);
+                memcpy(tmp[0], state, 8);
             if (j == 9999)
-                memcpy(ciphertext[1], plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationEncrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+                memcpy(tmp[1], state, 8);
+            if (TDES_ECB_Enc(&ctx, (uint32_t *)state, (uint32_t *)state, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(ENC)\n");
                 return -1;
             }
         }
         int l1 = 0, l2 = 0;
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", state[j]);
         fprintf(fp_ecb, "\n\n");
         if ((memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) == 0) || (memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) != 0)) {
             l1 = 0;
@@ -116,25 +109,25 @@ int main() {
         }
 
         for (int j = 0; j < 8; j++) {
-            tkey[j] ^= plaintext[j];
+            tkey[j] ^= state[j];
         }
         if (l1 == 0) {
             for (int j = 0; j < 8; j++) {
-                tkey[j + 8] ^= ciphertext[1][j];
+                tkey[j + 8] ^= tmp[1][j];
             }
         }else {
             for (int j = 0; j < 8; j++) {
-                tkey[j + 8] ^= plaintext[j];
+                tkey[j + 8] ^= state[j];
             }
         }
 
         if (l2 == 0) {
             for (int j = 0; j < 8; j++) {
-                tkey[16 + j] ^= plaintext[j];
+                tkey[16 + j] ^= state[j];
             }
         }else {
             for (int j = 0; j < 8; j++) {
-                tkey[16 + j] ^= ciphertext[0][j];
+                tkey[16 + j] ^= tmp[0][j];
             }
         }
     }
@@ -151,7 +144,7 @@ int main() {
 		fscanf(ecb, "%2hhx", &tkey[j]);
     fseek(ecb, 14, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &plaintext[j]);
+		fscanf(ecb, "%2hhx", &state[j]);
 
     for (int i = 0; i < 400; i++) {
         fprintf(fp_ecb, "COUNT = %d\n", i);
@@ -171,28 +164,29 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", state[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
 
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
-                memcpy(ciphertext[0], plaintext, 8);
+                memcpy(tmp[0], state, 8);
             if (j == 9999)
-                memcpy(ciphertext[1], plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationDecrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+                memcpy(tmp[1], state, 8);
+            if (TDES_ECB_Dec(&ctx, (uint32_t *)state, (uint32_t *)state, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(Dec)\n");
                 return -1;
             }
         }
 
         int l1 = 0, l2 = 0;
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", state[j]);
         fprintf(fp_ecb, "\n\n");
         if ((memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) == 0) || (memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) != 0)) {
             l1 = 0;
@@ -207,25 +201,25 @@ int main() {
         }
 
         for (int j = 0; j < 8; j++) {
-            tkey[j] ^= plaintext[j];
+            tkey[j] ^= state[j];
         }
         if (l1 == 0) {
             for (int j = 0; j < 8; j++) {
-                tkey[j + 8] ^= ciphertext[1][j];
+                tkey[j + 8] ^= tmp[1][j];
             }
         }else {
             for (int j = 0; j < 8; j++) {
-                tkey[j + 8] ^= plaintext[j];
+                tkey[j + 8] ^= state[j];
             }
         }
 
         if (l2 == 0) {
             for (int j = 0; j < 8; j++) {
-                tkey[16 + j] ^= plaintext[j];
+                tkey[16 + j] ^= state[j];
             }
         }else {
             for (int j = 0; j < 8; j++) {
-                tkey[16 + j] ^= ciphertext[0][j];
+                tkey[16 + j] ^= tmp[0][j];
             }
         }
     }

@@ -1,28 +1,26 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(nif_tdes LANGUAGES C)
+project(TDEA_TEST LANGUAGES C)
 
-include_directories(include/)
+include_directories(../../src/tdes)
 
-add_executable(ecb_mmt_test ecb_mmt_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-target_compile_options(ecb_mmt_test PRIVATE -g)
+#######
+add_executable(ecb_mmt_test ecb_mmt_test.c ../../src/tdes/tdes.c)
 
-add_executable(cbc_mmt_test cbc_mmt_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-target_compile_options(cbc_mmt_test PRIVATE -g)
+#add_executable(cbc_mmt_test cbc_mmt_test.c ../../src/tdes/tdes.c)
 
-add_executable(ctr_mmt_test ctr_mmt_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-target_compile_options(ctr_mmt_test PRIVATE -g)
+#add_executable(ctr_mmt_test ctr_mmt_test.c ../../src/tdes/tdes.c)
+#######
 
-add_executable(ecb_mct_test ecb_mct_test.c tdes.c nif_tdes.c integrity.c hardened.c)
+add_executable(ecb_mct_test ecb_mct_test.c ../../src/tdes/tdes.c)
+#add_compile_options(ecb_mct_test -O3)
+#add_executable(cbc_mct_test cbc_mct_test.c ../../src/tdes/tdes.c)
 
-add_executable(cbc_mct_test cbc_mct_test.c tdes.c nif_tdes.c integrity.c hardened.c)
+# key parity bit check
+add_executable(ecb_mct_parity_test ecb_mct_parity_test.c ../../src/tdes/tdes.c)
+#add_compile_options(ecb_mct_parity_test -O3)
+#add_executable(cbc_mct_parity_test cbc_mct_parity_test.c ../../src/tdes/tdes.c)
 
-# parity bit check
-add_executable(ecb_mct_parity_test ecb_mct_parity_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-add_executable(cbc_mct_parity_test cbc_mct_parity_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-
-#add_executable(cbc_mct_test cbc_mct_test.c tdes.c nif_tdes.c integrity.c hardened.c)
-#target_compile_options(cbc_mct_test PRIVATE -g)
 # 원본 파일의 경로
 set(ORIGINAL_FILE_PATH "TECBMMT3.rsp")
 set(ORIGINAL_FILE_PATH2 "TCBCMMT3.rsp")

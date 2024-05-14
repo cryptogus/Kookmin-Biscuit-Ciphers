@@ -9,29 +9,19 @@
 #include "tdes.h"
 
 int main() {
-    FILE *fp_ecb = fopen("TDES_ECB_MMT.nif", "w");
-    // FILE *fp_cbc = fopen("TDES_CBC_MMT.req", "w");
-    // FILE *fp_ctr = fopen("TDES_CTR_MMT.req", "w");
+    FILE *fp_ecb = fopen("TDES_ECB_MMT.rsp", "w");
 
     FILE* ecb = fopen("TECBMMT3.rsp", "r");
 
     unsigned char tkey[24];
-    unsigned char plaintext[128];
-    unsigned char ciphertext[128];
-
-
-    const crypto_key_config_t config_tmp = {.version = kCryptoLibVersion1, .key_mode = kKeyModeDesEcb,
-                                          .key_length = 24, .hw_backed = kHardenedBoolFalse, .exportable = kHardenedBoolTrue,
-                                          .security_level = kSecurityLevelLow};
-    crypto_blinded_key_t key = {.config = config_tmp, .keyblob_length = 24, .keyblob = (uint32_t *)tkey, .checksum = 0};
-
-    crypto_word32_buf_t iv = {.data = (uint32_t *)NULL, .len = 0};
+    unsigned char input[128];
+    unsigned char output[128];
 
     if (fp_ecb == NULL || ecb == NULL) {
         fprintf(stderr, "Failed to open file.\n");
         return 1;
     }
-    fprintf(fp_ecb,"# CAVS 18.0 for NIF\n");
+    fprintf(fp_ecb,"# CAVS 18.0 for my TDEA\n");
     fprintf(fp_ecb,"# Config Info for : \"TDESTestVectors\"\n");
     fprintf(fp_ecb,"# TDES Multi block Message Test for ECB\n");
     fprintf(fp_ecb,"# State : Encrypt and Decrypt\n");
@@ -76,23 +66,24 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fseek(ecb, 14, SEEK_CUR);
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 8 + 8*i; j++)
-			fscanf(ecb, "%2hhx", &plaintext[j]);
+			fscanf(ecb, "%2hhx", &input[j]);
         for (int j = 0; j < 8 + 8*i; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", input[j]);
         fprintf(fp_ecb, "\n");
-        crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8 + 8*i};
-        crypto_byte_buf_t cipher_output_n = {.data = ciphertext, .len = 8 + 8*i};
 
         fprintf(fp_ecb, "CIPHERTEXT = ");
-        if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationEncrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-            fprintf(stderr, "nif des fail\n");
+        if (TDES_ECB_Enc(&ctx, (uint32_t *)output, (uint32_t *)input, 8 + 8*i) != 1) {
+            fprintf(stderr, "TDEA MMT Fail(ENC)\n");
             return -1;
         }
         for (int j = 0; j < 8 + 8*i; j++)
-            fprintf(fp_ecb, "%02x", ciphertext[j]);
+            fprintf(fp_ecb, "%02x", output[j]);
         fprintf(fp_ecb, "\n\n");
 
         fseek(ecb, 16*i + 53, SEEK_CUR);
@@ -127,23 +118,24 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fseek(ecb, 14, SEEK_CUR);
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 8 + 8*i; j++)
-			fscanf(ecb, "%2hhx", &plaintext[j]);
+			fscanf(ecb, "%2hhx", &input[j]);
         for (int j = 0; j < 8 + 8*i; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
+            fprintf(fp_ecb, "%02x", input[j]);
         fprintf(fp_ecb, "\n");
-        crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8 + 8*i};
-        crypto_byte_buf_t cipher_output_n = {.data = ciphertext, .len = 8 + 8*i};
 
         fprintf(fp_ecb, "PLAINTEXT = ");
-        if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationDecrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-            fprintf(stderr, "nif des fail\n");
+        if (TDES_ECB_Dec(&ctx, (uint32_t *)output, (uint32_t *)input, 8 + 8*i) != 1) {
+            fprintf(stderr, "TDEA MMT Fail(DEC)\n");
             return -1;
         }
         for (int j = 0; j < 8 + 8*i; j++)
-            fprintf(fp_ecb, "%02x", ciphertext[j]);
+            fprintf(fp_ecb, "%02x", output[j]);
         fprintf(fp_ecb, "\n\n");
 
         fseek(ecb, 16*i + 52, SEEK_CUR);

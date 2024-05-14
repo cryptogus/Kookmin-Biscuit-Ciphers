@@ -35,21 +35,13 @@ void add_parity_bits(uint8_t *key) {
 }
 
 int main() {
-    FILE *fp_ecb = fopen("TDES_ECB_Monte.nif", "w");
+    FILE *fp_ecb = fopen("TDES_ECB_Monte_parity.rsp", "w");
 
     FILE* ecb = fopen("TECBMonte3.rsp", "r");
 
     unsigned char tkey[24];
     unsigned char plaintext[8];
     unsigned char ciphertext[2][8];
-
-
-    const crypto_key_config_t config_tmp = {.version = kCryptoLibVersion1, .key_mode = kKeyModeDesEcb,
-                                          .key_length = 24, .hw_backed = kHardenedBoolFalse, .exportable = kHardenedBoolTrue,
-                                          .security_level = kSecurityLevelLow};
-    crypto_blinded_key_t key = {.config = config_tmp, .keyblob_length = 24, .keyblob = (uint32_t *)tkey, .checksum = 0};
-
-    crypto_word32_buf_t iv = {.data = (uint32_t *)NULL, .len = 0};
 
     if (fp_ecb == NULL || ecb == NULL) {
         fprintf(stderr, "Failed to open file.\n");
@@ -105,21 +97,23 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", plaintext[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
+
 
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
                 memcpy(ciphertext[0], plaintext, 8);
             if (j == 9999)
                 memcpy(ciphertext[1], plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationEncrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+            if (TDES_ECB_Enc(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(ENC)\n");
                 return -1;
             }
         }
@@ -173,6 +167,7 @@ int main() {
     fseek(ecb, 9, SEEK_CUR);
     for (int j = 16; j < 24; j++)
 		fscanf(ecb, "%2hhx", &tkey[j]);
+
     fseek(ecb, 14, SEEK_CUR);
     for (int j = 0; j < 8; j++)
 		fscanf(ecb, "%2hhx", &plaintext[j]);
@@ -196,23 +191,24 @@ int main() {
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
 
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", plaintext[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
 
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
                 memcpy(ciphertext[0], plaintext, 8);
             if (j == 9999)
                 memcpy(ciphertext[1], plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeEcb, kDesOperationDecrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
-                return -1;
-            }
+            if (TDES_ECB_Dec(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+            fprintf(stderr, "TDEA MMT Fail(DEC)\n");
+            return -1;
+        }
         }
 
         int l1 = 0, l2 = 0;
