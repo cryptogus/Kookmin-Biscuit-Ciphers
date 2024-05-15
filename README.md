@@ -49,6 +49,13 @@ https://crypto.stackexchange.com/questions/18267/how-do-we-compute-iv1-in-ctr-mo
 https://stackoverflow.com/questions/12529612/interoperability-of-aes-ctr-mode  
 https://github.com/openssl/openssl/blob/master/crypto/modes/ctr128.c - CTR mode is big-endian
 
+**TEST**
+- The Multi-block Message Test (MMT) for TDES
+- The Monte Carlo Test (MCT) for TDES
+- The Multi-block Message Test (MMT) for AES (not yet)
+- The Monte Carlo Test (MCT) for AES (not yet)
+- reference: https://csrc.nist.gov/Projects/cryptographic-algorithm-validation-program/Block-Ciphers
+
 ## Windows
 1. git
    https://git-scm.com/download/win
