@@ -7,7 +7,7 @@ include_directories(../../src/tdes)
 #######
 add_executable(ecb_mmt_test ecb_mmt_test.c ../../src/tdes/tdes.c)
 
-#add_executable(cbc_mmt_test cbc_mmt_test.c ../../src/tdes/tdes.c)
+add_executable(cbc_mmt_test cbc_mmt_test.c ../../src/tdes/tdes.c)
 
 add_executable(ctr_mmt_test ctr_mmt_test.c ../../src/tdes/tdes.c)
 #######
