@@ -100,24 +100,24 @@ int main() {
         for (int j = 16; j < 24; j++)
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
 
         fprintf(fp_ecb, "IV = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", IV[j]);
         fprintf(fp_ecb, "\n");
+        ctx.IV = (uint32_t *)IV;
 
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", plaintext[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
 
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
-
-            if (TDES) {
-                fprintf(stderr, "des fail\n");
+            if (TDES_CBC_Enc(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(ENC)\n");
                 return -1;
             }
             unsigned char tmp[8];
@@ -214,29 +214,30 @@ int main() {
         for (int j = 16; j < 24; j++)
             fprintf(fp_ecb, "%02x", tkey[j]);
         fprintf(fp_ecb, "\n");
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
 
         fprintf(fp_ecb, "IV = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", IV[j]);
         fprintf(fp_ecb, "\n");
+        ctx.IV = (uint32_t *)IV;
 
         fprintf(fp_ecb, "CIPHERTEXT = ");
         for (int j = 0; j < 8; j++)
             fprintf(fp_ecb, "%02x", plaintext[j]);
         fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
 
         fprintf(fp_ecb, "PLAINTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
                 memcpy(ciphertext[0], plaintext, 8);
             if (j == 9999)
                 memcpy(ciphertext[1], plaintext, 8);
             unsigned char tmp[8];
             memcpy(tmp, plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeCbc, kDesOperationDecrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+            if (TDES_CBC_Dec(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(DEC)\n");
                 return -1;
             }
             memcpy(IV, tmp, 8);

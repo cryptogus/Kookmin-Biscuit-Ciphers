@@ -13,28 +13,28 @@
 #include "tdes.h"
 
 int main() {
-    FILE *fp_ecb = fopen("TDES_CBC_Monte.rsp", "w");
+    FILE *fp_cbc = fopen("TDES_CBC_Monte.rsp", "w");
 
-    FILE* ecb = fopen("TCBCMonte3.rsp", "r");
+    FILE* cbc = fopen("TCBCMonte3.rsp", "r");
 
     unsigned char tkey[24];
     unsigned char plaintext[8];
     unsigned char ciphertext[2][8];
     unsigned char IV[8];
 
-    if (fp_ecb == NULL || ecb == NULL) {
+    if (fp_cbc == NULL || cbc == NULL) {
         fprintf(stderr, "Failed to open file.\n");
         return 1;
     }
-    fprintf(fp_ecb,"# CAVS 11.1 for my TDEA\n");
-    fprintf(fp_ecb,"# Config Info for : \"tdes_values\"\n");
-    fprintf(fp_ecb,"# TDES Monte Carlo (Modes) Test for CBC\n");
-    fprintf(fp_ecb,"# State : Encrypt and Decrypt\n");
+    fprintf(fp_cbc,"# CAVS 11.1 for my TDEA\n");
+    fprintf(fp_cbc,"# Config Info for : \"tdes_values\"\n");
+    fprintf(fp_cbc,"# TDES Monte Carlo (Modes) Test for CBC\n");
+    fprintf(fp_cbc,"# State : Encrypt and Decrypt\n");
     time_t current_time;
     time(&current_time);
     struct tm *timeinfo = localtime(&current_time);
 
-    fprintf(fp_ecb,"# %04d-%02d-%02d %02d:%02d:%02d\n\n",
+    fprintf(fp_cbc,"# %04d-%02d-%02d %02d:%02d:%02d\n\n",
             timeinfo->tm_year + 1900,   // 년도
             timeinfo->tm_mon + 1,       // 월
             timeinfo->tm_mday,          // 일
@@ -42,61 +42,63 @@ int main() {
             timeinfo->tm_min,           // 분
             timeinfo->tm_sec);          // 초
 
-    fseek(ecb, 0xb2, SEEK_SET);
+    fseek(cbc, 0xb2, SEEK_SET);
     for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]); // 2자리씩 hex값 읽어오기
-    fseek(ecb, 9, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]); // 2자리씩 hex값 읽어오기
+    fseek(cbc, 9, SEEK_CUR);
     for (int j = 8; j < 16; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]);
-    fseek(ecb, 9, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]);
+    fseek(cbc, 9, SEEK_CUR);
     for (int j = 16; j < 24; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]);
-    fseek(ecb, 7, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]);
+    fseek(cbc, 7, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-	    fscanf(ecb, "%2hhx", &IV[j]);
-    fseek(ecb, 14, SEEK_CUR);
+	    fscanf(cbc, "%2hhx", &IV[j]);
+    fseek(cbc, 14, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &plaintext[j]);
+		fscanf(cbc, "%2hhx", &plaintext[j]);
 
-    fprintf(fp_ecb, "[ENCRYPT]\n\n");
+    fprintf(fp_cbc, "[ENCRYPT]\n\n");
 
     for (int i = 0; i < 400; i++) {
-        fprintf(fp_ecb, "COUNT = %d\n", i);
+        fprintf(fp_cbc, "COUNT = %d\n", i);
 
-        fprintf(fp_ecb, "KEY1 = ");
+        fprintf(fp_cbc, "KEY1 = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "KEY2 = ");
+        fprintf(fp_cbc, "KEY2 = ");
         for (int j = 8; j < 16; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "KEY3 = ");
+        fprintf(fp_cbc, "KEY3 = ");
         for (int j = 16; j < 24; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "IV = ");
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
+        fprintf(fp_cbc, "IV = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", IV[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", IV[j]);
+        fprintf(fp_cbc, "\n");
+        ctx.IV = (uint32_t *)IV;
 
-        fprintf(fp_ecb, "PLAINTEXT = ");
+        fprintf(fp_cbc, "PLAINTEXT = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
-        fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
+            fprintf(fp_cbc, "%02x", plaintext[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "CIPHERTEXT = ");
+        fprintf(fp_cbc, "CIPHERTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
-
-            if (nifcrypto_des(&key, iv, kBlockCipherModeCbc, kDesOperationEncrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+            if (TDES_CBC_Enc(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(ENC)\n");
                 return -1;
             }
+
             unsigned char tmp[8];
             if (j == 0)
                 memcpy(tmp, IV, 8);
@@ -116,8 +118,8 @@ int main() {
         }
         int l1 = 0, l2 = 0;
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
-        fprintf(fp_ecb, "\n\n");
+            fprintf(fp_cbc, "%02x", plaintext[j]);
+        fprintf(fp_cbc, "\n\n");
         if ((memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) == 0) || (memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) != 0)) {
             l1 = 0;
         }else {
@@ -131,7 +133,7 @@ int main() {
         }
 
         for (int j = 0; j < 8; j++) {
-            tkey[j] ^= plaintext[j] ^ 0x0101010101010101;
+            tkey[j] ^= plaintext[j];
         }
         if (l1 == 0) {
             for (int j = 0; j < 8; j++) {
@@ -155,72 +157,74 @@ int main() {
         memcpy(IV, plaintext, 8);
         memcpy(plaintext, ciphertext[0], 8);
     }
-    fseek(ecb, 0x11031, SEEK_SET);
-    fprintf(fp_ecb, "[DECRYPT]\n\n");
+    fseek(cbc, 0x11031, SEEK_SET);
+    fprintf(fp_cbc, "[DECRYPT]\n\n");
 
    for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]); // 2자리씩 hex값 읽어오기
-    fseek(ecb, 9, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]); // 2자리씩 hex값 읽어오기
+    fseek(cbc, 9, SEEK_CUR);
     for (int j = 8; j < 16; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]);
-    fseek(ecb, 9, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]);
+    fseek(cbc, 9, SEEK_CUR);
     for (int j = 16; j < 24; j++)
-		fscanf(ecb, "%2hhx", &tkey[j]);
-    fseek(ecb, 7, SEEK_CUR);
+		fscanf(cbc, "%2hhx", &tkey[j]);
+    fseek(cbc, 7, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-	    fscanf(ecb, "%2hhx", &IV[j]);
-    fseek(ecb, 14, SEEK_CUR);
+	    fscanf(cbc, "%2hhx", &IV[j]);
+    fseek(cbc, 14, SEEK_CUR);
     for (int j = 0; j < 8; j++)
-		fscanf(ecb, "%2hhx", &plaintext[j]);
+		fscanf(cbc, "%2hhx", &plaintext[j]);
 
     for (int i = 0; i < 400; i++) {
-        fprintf(fp_ecb, "COUNT = %d\n", i);
+        fprintf(fp_cbc, "COUNT = %d\n", i);
 
-        fprintf(fp_ecb, "KEY1 = ");
+        fprintf(fp_cbc, "KEY1 = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "KEY2 = ");
+        fprintf(fp_cbc, "KEY2 = ");
         for (int j = 8; j < 16; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "KEY3 = ");
+        fprintf(fp_cbc, "KEY3 = ");
         for (int j = 16; j < 24; j++)
-            fprintf(fp_ecb, "%02x", tkey[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", tkey[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "IV = ");
+        TDES_CTX ctx;
+        TDES_set_key(&ctx, (uint32_t *)tkey, 24);
+
+        fprintf(fp_cbc, "IV = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", IV[j]);
-        fprintf(fp_ecb, "\n");
+            fprintf(fp_cbc, "%02x", IV[j]);
+        fprintf(fp_cbc, "\n");
+        ctx.IV = (uint32_t *)IV;
 
-        fprintf(fp_ecb, "CIPHERTEXT = ");
+        fprintf(fp_cbc, "CIPHERTEXT = ");
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
-        fprintf(fp_ecb, "\n");
-        crypto_byte_buf_t cipher_output_n = {.data = plaintext, .len = 8};
+            fprintf(fp_cbc, "%02x", plaintext[j]);
+        fprintf(fp_cbc, "\n");
 
-        fprintf(fp_ecb, "PLAINTEXT = ");
+        fprintf(fp_cbc, "PLAINTEXT = ");
         for (int j = 0; j < 10000; j++) {
-            crypto_const_byte_buf_t cipher_input_n = {.data = plaintext, .len = 8}; // 매 루프마다 스택영역에 변수 선언 (const라 값 변경이 불가능)
             if (j == 9998)
                 memcpy(ciphertext[0], plaintext, 8);
             if (j == 9999)
                 memcpy(ciphertext[1], plaintext, 8);
             unsigned char tmp[8];
             memcpy(tmp, plaintext, 8);
-            if (nifcrypto_des(&key, iv, kBlockCipherModeCbc, kDesOperationDecrypt, cipher_input_n, kDesPaddingNull, &cipher_output_n) != kCryptoStatusOK) {
-                fprintf(stderr, "nif des fail\n");
+            if (TDES_CBC_Dec(&ctx, (uint32_t *)plaintext, (uint32_t *)plaintext, 8) != 1) {
+                fprintf(stderr, "TDEA MCT Fail(DEC)\n");
                 return -1;
             }
             memcpy(IV, tmp, 8);
         }
         int l1 = 0, l2 = 0;
         for (int j = 0; j < 8; j++)
-            fprintf(fp_ecb, "%02x", plaintext[j]);
-        fprintf(fp_ecb, "\n\n");
+            fprintf(fp_cbc, "%02x", plaintext[j]);
+        fprintf(fp_cbc, "\n\n");
         if ((memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) == 0) || (memcmp(tkey, tkey + 8, 8) != 0 && memcmp(tkey, tkey + 16, 8) != 0)) {
             l1 = 0;
         }else {

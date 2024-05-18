@@ -14,12 +14,12 @@ add_executable(ctr_mmt_test ctr_mmt_test.c ../../src/tdes/tdes.c)
 
 add_executable(ecb_mct_test ecb_mct_test.c ../../src/tdes/tdes.c)
 #add_compile_options(ecb_mct_test -O3)
-#add_executable(cbc_mct_test cbc_mct_test.c ../../src/tdes/tdes.c)
+add_executable(cbc_mct_test cbc_mct_test.c ../../src/tdes/tdes.c)
 
 # key parity bit check
 add_executable(ecb_mct_parity_test ecb_mct_parity_test.c ../../src/tdes/tdes.c)
 #add_compile_options(ecb_mct_parity_test -O3)
-#add_executable(cbc_mct_parity_test cbc_mct_parity_test.c ../../src/tdes/tdes.c)
+add_executable(cbc_mct_parity_test cbc_mct_parity_test.c ../../src/tdes/tdes.c)
 
 # 원본 파일의 경로
 set(ORIGINAL_FILE_PATH "TECBMMT3.rsp")
