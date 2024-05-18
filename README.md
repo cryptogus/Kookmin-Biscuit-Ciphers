@@ -11,7 +11,7 @@ Currently, it has been tested only on Linux in 2023.11
 
 This content follows **GNU GENERAL PUBLIC LICENSE Version 3**.
 
-**Cryptographic Calculation Tool**  
+**Cryptographic Calculation Tool**
 http://cryptomanager.com/
 
 ### Environmental System Information
@@ -42,19 +42,22 @@ http://cryptomanager.com/
 **Modes of Operation**
 - ECB
 - CBC
-- CTR (I developed the code so that it is not available for blocks that are not 16 bytes in size.)  
+- CTR (I developed the code so that it is not available for blocks that are not 16 bytes in size.)
 
-https://crypto.stackexchange.com/questions/88783/ctr-block-generation  
-https://crypto.stackexchange.com/questions/18267/how-do-we-compute-iv1-in-ctr-mode  
-https://stackoverflow.com/questions/12529612/interoperability-of-aes-ctr-mode  
+https://crypto.stackexchange.com/questions/88783/ctr-block-generation
+https://crypto.stackexchange.com/questions/18267/how-do-we-compute-iv1-in-ctr-mode
+https://stackoverflow.com/questions/12529612/interoperability-of-aes-ctr-mode
 https://github.com/openssl/openssl/blob/master/crypto/modes/ctr128.c - CTR mode is big-endian
 
 **TEST**
+`test/TDEA-KAT`
 - The Multi-block Message Test (MMT) for TDES
 - The Monte Carlo Test (MCT) for TDES
+
 - The Multi-block Message Test (MMT) for AES (not yet)
 - The Monte Carlo Test (MCT) for AES (not yet)
-- reference: https://csrc.nist.gov/Projects/cryptographic-algorithm-validation-program/Block-Ciphers
+
+reference: https://csrc.nist.gov/Projects/cryptographic-algorithm-validation-program/Block-Ciphers
 
 ## Windows
 1. git
@@ -122,7 +125,12 @@ On Ubuntu:
         ├── chacha_quarter_round_test
         ├── chacha_encrypt_test
         ├── iso9797m2-test
-        └── pks7-test
+        ├── pks7-test
+        └── TDEA-KAT
+            ├── ecb_mmt_test
+            ├── ecb_mct_test
+            ├── cbc_mmt_parity_test
+            └── cbc_mct_patity_test
     KBC_gui/
     └──libKBC.so
     ```

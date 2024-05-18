@@ -23,3 +23,5 @@ add_executable(iso9797m2-test ../src/padding/iso9797m2.c iso9797m2-test.c)
 add_executable(ECB_test ../src/padding/pkcs7.c ../src/aes/aes.c ../src/mode/ECB.c ECB-test.c)
 add_executable(CBC_test ../src/padding/pkcs7.c ../src/aes/aes.c ../src/mode/CBC.c CBC-test.c)
 add_executable(CTR_test ../src/padding/pkcs7.c ../src/aes/aes.c ../src/mode/CTR.c CTR-test.c)
+
+add_subdirectory(TDEA-KAT)
