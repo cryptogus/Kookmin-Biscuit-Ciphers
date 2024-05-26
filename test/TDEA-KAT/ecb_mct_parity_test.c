@@ -47,7 +47,7 @@ int main() {
         fprintf(stderr, "Failed to open file.\n");
         return 1;
     }
-    fprintf(fp_ecb,"# CAVS 11.1 for NIF\n");
+    fprintf(fp_ecb,"# CAVS 11.1 for my TDEA\n");
     fprintf(fp_ecb,"# Config Info for : \"tdes_values\"\n");
     fprintf(fp_ecb,"# TDES Monte Carlo (Modes) Test for ECB\n");
     fprintf(fp_ecb,"# State : Encrypt and Decrypt\n");
