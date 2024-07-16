@@ -1,0 +1,23 @@
+# Ensure .gitattributes uses LF
+.gitattributes text eol=lf
+
+# Ensure .gitignore uses LF
+.gitignore text eol=lf
+
+# Handle text files with LF
+* text=auto eol=lf
+
+# Define line endings for specific files
+*.c text eol=lf
+*.h text eol=lf
+*.cpp text eol=lf
+*.hpp text eol=lf
+
+# Handle binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.zip binary
+*.exe binary
+*.dll binary
