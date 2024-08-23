@@ -4,6 +4,8 @@
     - [Linux build](#linux)
     - [Cross compilation](#cross-compilation)
 
+https://asecuritysite.com/ -> I think it's the best site on cryptography.
+
 # Kookmin Biscuit Cipher (KBC) for students
 KBC is an C program for testing block cipher.
 
