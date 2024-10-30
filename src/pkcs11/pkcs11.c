@@ -22,6 +22,10 @@ void aes_ecb_encrypt(CK_FUNCTION_LIST_3_0_PTR pkcs11, CK_SESSION_HANDLE session,
 }
 
 int main() {
+    CK_FUNCTION_LIST_3_0 pkcs11 = {
+    .version = {CRYPTOKI_VERSION_MAJOR, CRYPTOKI_VERSION_MINOR},
+    
+    };
     CK_RV rv;
     CK_C_INITIALIZE_ARGS initArgs = {  };  // Initialize with appropriate values
 
