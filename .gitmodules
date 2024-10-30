@@ -1,0 +1,6 @@
+[submodule "pkcs11"]
+	path = pkcs11
+	url = https://github.com/oasis-tcs/pkcs11.git
+[submodule "pkcs11-3.10"]
+	path = pkcs11-3.10
+	url = https://github.com/oasis-tcs/pkcs11.git
