@@ -100,13 +100,20 @@ On Ubuntu:
     ```
 
 2. Build
-    OpenSSL can be disabled when the user forwards it from the command line, such as -DUSE_OPENSSL=OFF.
+    OpenSSL can be disabled when the user forwards it from the command line, such as `-DUSE_OPENSSL=OFF`.
     OpenSSL is used only on rsa2048.
     ```bash
     $ cmake -B build -S .&& cd build
     # $ cmake -B build -S . -DUSE_OPENSSL=OFF && cd build
     $ make -j$(nproc)
     ```
+   After running `make install` and executing `ldconfig`, the `openKBC` executable will be accessible from any location in the terminal. This is because the installation process places the executable in `/usr/local/bin`, and `ldconfig` updates the system's library cache to include the path to the shared libraries, allowing the executable to find them regardless of the current working directory.
+
+    ```bash
+    $ sudo make install
+    $ sudo ldconfig
+    ```
+
     ```bash
     계층 구조
 
