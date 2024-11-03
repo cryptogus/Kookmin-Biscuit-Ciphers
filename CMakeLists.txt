@@ -48,3 +48,21 @@ if(USE_OPENSSL)
         message(FATAL_ERROR "OpenSSL not found. Please install OpenSSL.")
     endif()
 endif()
+
+set_target_properties(KBC
+    PROPERTIES
+    OUTPUT_NAME "KBC"
+    PUBLIC_HEADER "apps/api.h"
+    SOVERSION 1 # 공유 라이브러리의 소버전 번호
+    # For Windows DLLs
+    # RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+)
+install(TARGETS KBC
+    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+    # PUBLIC_HEADER DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/openKBC/"
+    )
+
+
+install(TARGETS ${CMAKE_PROJECT_NAME}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
