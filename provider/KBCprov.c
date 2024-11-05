@@ -41,13 +41,12 @@ OSSL_DISPATCH openkbc[] = {
 
 typedef struct {
     OSSL_LIB_CTX *libctx;
-    OQSX_KEY *kem;
+    uint8_t *key;
 } PROV_KBC_CTX;
 
 static void *kbc_newctx(void *provctx) {
     PROV_KBC_CTX *kbcctx = OPENSSL_zalloc(sizeof(PROV_KBC_CTX));
 
-    OQS_KEM_PRINTF("OQS KEM provider called: newctx\n");
     if (kbcctx == NULL)
         return NULL;
     kbcctx->libctx = PROV_KBC_LIBCTX_OF(provctx);
