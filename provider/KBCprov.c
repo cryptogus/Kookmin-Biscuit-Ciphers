@@ -21,17 +21,24 @@
 #include <string.h>
 #include "aes.h"
 
+#include <openssl/evp.h>
 // aes example
 static OSSL_FUNC_cipher_newctx_fn kbc_newctx;
-static OSSL_FUNC_cipher_encrypt_init_fn kbc_aes128_init;
+static OSSL_FUNC_cipher_encrypt_init_fn kbc_aes128_enc_init;
+static OSSL_FUNC_cipher_decrypt_init_fn kbc_aes128_dec_init;
 static OSSL_FUNC_cipher_update_fn kbc_aes128_update;
 static OSSL_FUNC_cipher_final_fn kbc_aes128_final;
+static OSSL_FUNC_cipher_cipher_fn kbc_aes128_cipher;
+static OSSL_FUNC_cipher_freectx_fn kbc_aes128_freectx;
+
 OSSL_DISPATCH openkbc[] = {
     {OSSL_FUNC_CIPHER_NEWCTX, (void (*)(void))kbc_newctx},
-    {OSSL_FUNC_CIPHER_ENCRYPT_INIT, (void (*)(void))kbc_aes128_init},
+    {OSSL_FUNC_CIPHER_ENCRYPT_INIT, (void (*)(void))kbc_aes128_enc_init},
+    {OSSL_FUNC_CIPHER_DECRYPT_INIT, (void (*)(void))kbc_aes128_dec_init},
     {OSSL_FUNC_CIPHER_UPDATE, (void (*)(void))kbc_aes128_update},
-    {OSSL_FUNC_CIPHER_FINAL, (void (*)(void))kbc_aes128_final}
-
+    {OSSL_FUNC_CIPHER_FINAL, (void (*)(void))kbc_aes128_final},
+    {OSSL_FUNC_CIPHER_CIPHER, (void (*)(void))kbc_aes128_cipher},
+    {OSSL_FUNC_CIPHER_FREECTX, (void (*)(void))kbc_aes128_freectx},
 };
 /**
  * @brief provctx 포인터를 받아서 그 값이 NULL이 아닌 경우 해당 포인터가 가리키는 PROV_KBC_CTX 구조체의 libctx 필드를 반환
@@ -54,30 +61,25 @@ static void *kbc_newctx(void *provctx) {
     return kbcctx;
 }
 
-/* reference
-static int oqs_kem_decapsencaps_init(void *vpkemctx, void *vkem,
-                                     int operation) {
-    PROV_OQSKEM_CTX *pkemctx = (PROV_OQSKEM_CTX *)vpkemctx;
 
-    OQS_KEM_PRINTF3("OQS KEM provider called: _init : New: %p; old: %p \n",
-                    vkem, pkemctx->kem);
-    if (pkemctx == NULL || vkem == NULL || !oqsx_key_up_ref(vkem))
+static int kbc_encdec_init(void *vpkemctx, void *vkem,
+                                     int operation) {
+    PROV_KBC_CTX *pkemctx = (PROV_KBC_CTX *)vpkemctx;
+
+    if (pkemctx == NULL || vkem == NULL )
         return 0;
-    oqsx_key_free(pkemctx->kem);
+    // free(pkemctx->key);
     pkemctx->kem = vkem;
 
     return 1;
 }
 
-static int oqs_kem_encaps_init(void *vpkemctx, void *vkem,
+static int kbc_enc_init(void *vpkemctx, void *vkem,
                                const OSSL_PARAM params[]) {
-    OQS_KEM_PRINTF("OQS KEM provider called: encaps_init\n");
-    return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_ENCAPSULATE);
+    return kbc_encdec_init(vpkemctx, vkem, EVP_PKEY_OP_ENCRYPT); // oqs 참고한거고 대칭키 쪽에는 EVP_PKEY_OP_ENCRYPT와 같은 상수가 없어서 그냥 공개키 쪽 가져다 씀 
 }
 
-static int oqs_kem_decaps_init(void *vpkemctx, void *vkem,
+static int kbc_dec_init(void *vpkemctx, void *vkem,
                                const OSSL_PARAM params[]) {
-    OQS_KEM_PRINTF("OQS KEM provider called: decaps_init\n");
-    return oqs_kem_decapsencaps_init(vpkemctx, vkem, EVP_PKEY_OP_DECAPSULATE);
+    return kbc_encdec_init(vpkemctx, vkem, EVP_PKEY_OP_DECRYPT); // above as same
 }
-*/
