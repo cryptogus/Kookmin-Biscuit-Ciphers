@@ -20,6 +20,28 @@ void AES192_Decrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[1
 void AES256_Encrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[16]);
 void AES256_Decrypt(uint8_t cipherText[16] ,uint8_t plainText[16], uint8_t key[16]);
 
+/**
+ * @brief 3DES
+ */
+typedef struct {
+  uint8_t w[3][128]; /*  TDES round key      */
+  uint32_t *IV;      /* IV */
+} TDES_CTX;
+
+int TDES_set_key(TDES_CTX *ctx, const uint32_t *key,
+                             size_t key_len);
+
+int TDES_ECB_Enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len);
+int TDES_ECB_Dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len);
+int TDES_CBC_Enc(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len);
+int TDES_CBC_Dec(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                             int32_t len);
+int TDES_CTR(TDES_CTX *ctx, uint32_t *dest, uint32_t *src,
+                         int32_t len);
+
 /***
  * PIPO, reference: https://eprint.iacr.org/2020/1582.pdf
 */

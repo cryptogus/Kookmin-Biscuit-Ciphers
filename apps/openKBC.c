@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "api.h"
+#include <unistd.h> // for getopt
 
 // 현재는 padding 방법을 pkcs7으로 통일, 선택권 X
 void usage()
@@ -40,6 +41,9 @@ void help()
 
     printf("\n");
     printf("seed");
+
+    printf("\n");
+    printf("3des-112\t3des-168 - only test");
 
     printf("\n\n");
     printf("Stream cipher commands:\n");
@@ -195,6 +199,16 @@ int main(int argc, char *argv[]) {
                 printf("%02x", output[i]);
             printf("\n");
             return 0;
+        } else if (strcmp(argv[2], "3des-112") == 0){ // To Do:
+            TDES_CTX ctx;
+            if (TDES_set_key(&ctx, (uint32_t *)argv[3], 16) != 1)
+                fprintf(stderr,"Set key fail\n");
+            uint8_t in[8];
+            uint8_t out[8];
+            TDES_ECB_Enc(&ctx,(uint32_t *)out,(uint32_t *)in, 8);
+            for (size_t i = 0; i < 8; i++)
+                printf("%02x", out[i]);
+            printf("\n");
         }else{
             usage();
             return 3;
